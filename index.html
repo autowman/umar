@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Umar’s Portfolio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html {
+      scroll-behavior: smooth;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f4f4f4;
+      color: #333;
+    }
+    .container {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    h1 {
+      font-size: 5rem;
+      margin-bottom: 1rem;
+      color: #28a745;
+    }
+    p {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    a {
+      color: #28a745;
+      text-decoration: none;
+      font-weight: bold;
+      margin: 0 10px;
+      font-size: 1.2rem;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    button {
+      background: #28a745;
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      font-size: 1.2rem;
+      margin: 10px;
+      cursor: pointer;
+      border-radius: 25px;
+      transition: background 0.3s ease;
+      box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+    }
+    button:hover {
+      background: #218838;
+    }
+    section {
+      width: 100%;
+      padding: 100px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .content-box {
+      width: 45%;
+      padding: 50px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    #study-life {
+      background: #e1ecf4;
+      display: flex;
+      justify-content: flex-end;
+    }
+    #hobbies {
+      background: #d1f4e1;
+      display: flex;
+      justify-content: flex-start;
+    }
+    h2 {
+      font-size: 2.5rem;
+      color: #28a745;
+    }
+    .image {
+      width: 100%;
+      max-width: 400px;
+      border-radius: 12px;
+      margin-top: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Umarjon Ibragimov</h1>
+    <p>Final-year student, future business expert.</p>
+    <p><a href="https://github.com/autowman" target="_blank">GitHub</a> | <a href="https://linkedin.com/in/umarjonibragimov" target="_blank">LinkedIn</a></p>
+    <button onclick="document.getElementById('study-life').scrollIntoView({ behavior: 'smooth' });">Study Life</button>
+    <button onclick="document.getElementById('hobbies').scrollIntoView({ behavior: 'smooth' });">Hobbies</button>
+  </div>
+  <section id="study-life">
+    <div class="content-box">
+      <h2>Study Life</h2>
+      <p>I'm a final-year student at Dong-A University, passionate about business strategy, management, and entrepreneurship.</p>
+      <img src="https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg" alt="Study life" class="image">
+    </div>
+  </section>
+  <section id="hobbies">
+    <div class="content-box">
+      <h2>Hobbies</h2>
+      <p>I enjoy reading business books, analyzing market trends, and networking with like-minded individuals.</p>
+      <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg" alt="Hobbies" class="image">
+    </div>
+  </section>
+</body>
+</html>
