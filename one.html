@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qatar Cargo Global Logistics Process</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    
+    body {
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      text-align: center;
+      padding: 30px 0;
+      background: linear-gradient(135deg, #831B4C 0%, #4B0082 100%);
+      color: white;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    h2 {
+      font-size: 1.8rem;
+      margin: 15px 0;
+      color: #831B4C;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+    
+    .process-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      margin: 40px 0;
+    }
+    
+    .step {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+    
+    .step:hover {
+      transform: translateY(-5px);
+    }
+    
+    .step-reversed {
+      flex-direction: row-reverse;
+    }
+    
+    .step-image {
+      flex: 0 0 40%;
+      position: relative;
+    }
+    
+    .step-image img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .location-tag {
+      position: absolute;
+      bottom: 15px;
+      left: 15px;
+      background-color: rgba(131, 27, 76, 0.85);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+    
+    .step-content {
+      flex: 1;
+    }
+    
+    .step-number {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background-color: #831B4C;
+      color: white;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 40px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-right: 15px;
+    }
+    
+    .step-title {
+      display: inline-block;
+      vertical-align: middle;
+      font-size: 1.6rem;
+      color: #831B4C;
+      margin-bottom: 15px;
+    }
+    
+    .step-description {
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+    }
+    
+    .key-features {
+      list-style-type: none;
+      margin-bottom: 15px;
+    }
+    
+    .key-features li {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+    
+    .key-features li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #831B4C;
+      font-weight: bold;
+    }
+    
+    .locations {
+      background-color: #f0f0f0;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+    
+    .locations-title {
+      font-weight: bold;
+      color: #831B4C;
+      margin-bottom: 5px;
+    }
+    
+    .connector {
+      height: 50px;
+      width: 3px;
+      background-color: #831B4C;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    .connector:after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: -4px;
+      width: 0;
+      height: 0;
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 10px solid #831B4C;
+    }
+    
+    .global-map {
+      margin: 40px 0;
+      text-align: center;
+    }
+    
+    .global-map h2 {
+      margin-bottom: 20px;
+    }
+    
+    .global-map img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 50px;
+      padding: 20px;
+      color: #777;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .step {
+        flex-direction: column;
+      }
+      
+      .step-reversed {
+        flex-direction: column;
+      }
+      
+      .step-image {
+        flex: 0 0 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Qatar Cargo Global Logistics Process</h1>
+      <p class="subtitle">A Worldwide Network from Origin to Destination</p>
+    </header>
+    
+    <div class="global-map">
+      <h2>Qatar Cargo's Global Network</h2>
+      <img src="/api/placeholder/800/450" alt="Qatar Cargo Global Network Map">
+      <!-- This would be replaced with an actual Qatar Cargo route map showing their global network -->
+    </div>
+    
+    <div class="process-flow">
+      <!-- Step 1: Collection -->
+      <div class="step">
+        <div class="step-image">
+          <img src="/api/placeholder/600/400" alt="Cargo collection facility in Frankfurt">
+          <!-- This would be replaced with an image of Qatar Cargo acceptance counter at Frankfurt Airport -->
+          <div class="location-tag">Frankfurt, Germany</div>
+        </div>
+        <div class="step-content">
+          <span class="step-number">1</span>
+          <h2 class="step-title">Initial Cargo Collection</h2>
+          <p class="step-description">The journey begins with cargo collection from customers through various channels, ensuring proper documentation and initial inspection.</p>
+          <ul class="key-features">
+            <li>Online booking portal and phone reservations</li>
+            <li>Collection through freight forwarders and sales representatives</li>
+            <li>Initial inspection and security screening</li>
+            <li>Preparation of Air Waybill (AWB) and export documentation</li>
+          </ul>
+          <div class="locations">
+            <p class="locations-title">Key Collection Hubs:</p>
+            <p>Frankfurt (Germany), London Heathrow (UK), Chicago O'Hare (USA), Shanghai Pudong (China), Singapore Changi, Mumbai (India), Johannesburg (South Africa), São Paulo (Brazil)</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="connector"></div>
+      
+      <!-- Step 2: Warehouse Operations -->
+      <div class="step step-reversed">
+        <div class="step-image">
+          <img src="/api/placeholder/600/400" alt="Qatar Cargo warehouse in Shanghai">
+          <!-- This would be replaced with an image of Qatar Cargo's temperature-controlled facility in Shanghai -->
+          <div class="location-tag">Shanghai, China</div>
+        </div>
+        <div class="step-content">
+          <span class="step-number">2</span>
+          <h2 class="step-title">Warehouse Operations</h2>
+          <p class="step-description">After collection, shipments enter Qatar Cargo's state-of-the-art warehouses for processing, classification, and storage according to their specific requirements.</p>
+          <ul class="key-features">
+            <li>Classification by cargo type (general, perishable, pharmaceutical, live animals)</li>
+            <li>Temperature-controlled zones (2-8°C, 15-25°C, -20°C)</li>
+            <li>High-value storage with enhanced security measures</li>
+            <li>Real-time tracking using barcode/RFID technology</li>
+          </ul>
+          <div class="locations">
+            <p class="locations-title">Major Warehouse Facilities:</p>
+            <p>Doha (Qatar) - Main 55,000 sqm facility at Hamad International Airport, Amsterdam Schiphol (Netherlands), Hong Kong International, Los Angeles (USA), Bangkok (Thailand)</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="connector"></div>
+      
+      <!-- Step 3: Flight Planning -->
+      <div class="step">
+        <div class="step-image">
+          <img src="/api/placeholder/600/400" alt="Load planning at Hamad International Airport">
+          <!-- This would be replaced with an image of cargo loading operations at Doha's Hamad International Airport -->
+          <div class="location-tag">Doha, Qatar</div>
+        </div>
+        <div class="step-content">
+          <span class="step-number">3</span>
+          <h2 class="step-title">Flight Planning & Load Preparation</h2>
+          <p class="step-description">Careful planning ensures optimal use of aircraft capacity and proper handling of different cargo types during loading.</p>
+          <ul class="key-features">
+            <li>Aircraft payload capacity assessment and optimization</li>
+            <li>ULD (Unit Load Device) preparation and allocation</li>
+            <li>Weight and balance calculations for flight safety</li>
+            <li>Special handling requirements implementation</li>
+          </ul>
+          <div class="locations">
+            <p class="locations-title">Primary Load Planning Centers:</p>
+            <p>Doha (Qatar) - Central operations hub, London (UK), Atlanta (USA), Brussels (Belgium) - Pharmaceutical excellence center, Hong Kong - Asian operations center</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="connector"></div>
+      
+      <!-- Step 4: Transportation -->
+      <div class="step step-reversed">
+        <div class="step-image">
+          <img src="/api/placeholder/600/400" alt="Qatar Cargo Boeing 777F taking off">
+          <!-- This would be replaced with an image of a Qatar Cargo 777F aircraft taking off -->
+          <div class="location-tag">Hamad International Airport</div>
+        </div>
+        <div class="step-content">
+          <span class="step-number">4</span>
+          <h2 class="step-title">Transportation</h2>
+          <p class="step-description">Qatar Cargo utilizes a modern fleet of aircraft to transport shipments globally while monitoring them throughout the journey.</p>
+          <ul class="key-features">
+            <li>Dedicated freighter aircraft (Boeing 777F, Boeing 747-8F)</li>
+            <li>Hub-and-spoke model centered on Doha's Hamad International Airport</li>
+            <li>Real-time shipment tracking via GPS/IoT devices</li>
+            <li>Temperature and condition monitoring for sensitive cargo</li>
+          </ul>
+          <div class="locations">
+            <p class="locations-title">Main Air Routes:</p>
+            <p>Asia-Europe (Shanghai/Hong Kong/Singapore to Frankfurt/London/Paris), Trans-Pacific (Hong Kong/Shanghai to Los Angeles/Chicago), Middle East-Europe (Doha to Frankfurt/London/Brussels), Trans-Atlantic (USA to Europe)</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="connector"></div>
+      
+      <!-- Step 5: Arrival Processing -->
+      <div class="step">
+        <div class="step-image">
+          <img src="/api/placeholder/600/400" alt="Cargo arrival processing in New York">
+          <!-- This would be replaced with an image of cargo unloading at JFK Airport -->
+          <div class="location-tag">New York, USA</div>
+        </div>
+        <div class="step-content">
+          <span class="step-number">5</span>
+          <h2 class="step-title">Arrival Processing</h2>
+          <p class="step-description">When cargo arrives at the destination, it undergoes systematic unloading, documentation processing, and interim storage if needed.</p>
+          <ul class="key-features">
+            <li>Priority-based unloading sequence</li>
+            <li>Import documentation and customs clearance processing</li>
+            <li>Quality checks to ensure shipment integrity</li>
+            <li>Temporary storage allocation or cross-docking operations</li>
+          </ul>
+          <div class="locations">
+            <p class="locations-title">Key Arrival Processing Centers:</p>
+            <p>New York JFK (USA), Chicago O'Hare (USA), Frankfurt (Germany), London Heathrow (UK), Milan Malpensa (Italy), Bangkok (Thailand), Sydney (Australia), Johannesburg (South Africa)</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="connector"></div>
+      
+      <!-- Step 6: Last-Mile Distribution -->
+      <div class="step step-reversed">
+        <div class="step-image">
+          <img src="/api/placeholder/600/400" alt="Last-mile delivery in Amsterdam">
+          <!-- This would be replaced with an image of Qatar Cargo trucks delivering in Amsterdam -->
+          <div class="location-tag">Amsterdam, Netherlands</div>
+        </div>
+        <div class="step-content">
+          <span class="step-number">6</span>
+          <h2 class="step-title">Last-Mile Distribution</h2>
+          <p class="step-description">The final phase involves delivering cargo to recipients efficiently and reliably, with proper documentation and confirmation.</p>
+          <ul class="key-features">
+            <li>Route optimization for efficient delivery</li>
+            <li>Vehicle allocation based on shipment characteristics</li>
+            <li>Electronic proof of delivery documentation</li>
+            <li>Customer satisfaction verification</li>
+          </ul>
+          <div class="locations">
+            <p class="locations-title">Distribution Networks:</p>
+            <p>Europe (integrated trucking network across EU countries), North America (specialized partners in USA and Canada), Asia (dedicated distribution centers in major Asian cities including Singapore, Hong Kong, Shanghai, Tokyo), Middle East (Qatar-based fleet serving GCC countries)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <footer>
