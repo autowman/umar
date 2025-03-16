@@ -208,6 +208,39 @@
       font-size: 0.9rem;
     }
     
+    /* Home button styling to match Qatar Cargo theme */
+    .home-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #831B4C 0%, #4B0082 100%);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .home-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+    
+    .home-icon {
+      width: 24px;
+      height: 24px;
+      stroke: white;
+      stroke-width: 2px;
+    }
+    
     @media (max-width: 768px) {
       .step {
         flex-direction: column;
@@ -219,6 +252,13 @@
       
       .step-image {
         flex: 0 0 100%;
+      }
+      
+      .home-button {
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
       }
     }
   </style>
@@ -393,3 +433,18 @@
     </div>
     
     <footer>
+      <p>© 2025 Qatar Cargo. All Rights Reserved.</p>
+      <p>Qatar Airways Cargo, PO Box 22550, Doha, Qatar</p>
+    </footer>
+  </div>
+  
+  <!-- Fixed Home Button -->
+  <a href="index.html" class="home-button" title="Go to Homepage">
+    <svg class="home-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+    </svg>
+  </a>
+  
+</body>
+</html>
