@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Qatar Cargo Global Logistics Process</title>
+  <title>Qatar Cargo Logistics Process</title>
   <style>
     * {
       margin: 0;
@@ -88,18 +88,6 @@
       box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     
-    .location-tag {
-      position: absolute;
-      bottom: 15px;
-      left: 15px;
-      background-color: rgba(131, 27, 76, 0.85);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-weight: bold;
-      font-size: 0.9rem;
-    }
-    
     .step-content {
       flex: 1;
     }
@@ -133,7 +121,6 @@
     
     .key-features {
       list-style-type: none;
-      margin-bottom: 15px;
     }
     
     .key-features li {
@@ -149,19 +136,6 @@
       left: 0;
       color: #831B4C;
       font-weight: bold;
-    }
-    
-    .locations {
-      background-color: #f0f0f0;
-      padding: 12px;
-      border-radius: 8px;
-      margin-top: 10px;
-    }
-    
-    .locations-title {
-      font-weight: bold;
-      color: #831B4C;
-      margin-bottom: 5px;
     }
     
     .connector {
@@ -182,22 +156,6 @@
       border-left: 5px solid transparent;
       border-right: 5px solid transparent;
       border-top: 10px solid #831B4C;
-    }
-    
-    .global-map {
-      margin: 40px 0;
-      text-align: center;
-    }
-    
-    .global-map h2 {
-      margin-bottom: 20px;
-    }
-    
-    .global-map img {
-      max-width: 100%;
-      height: auto;
-      border-radius: 8px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
     }
     
     footer {
@@ -226,21 +184,15 @@
 <body>
   <div class="container">
     <header>
-      <h1>Qatar Cargo Global Logistics Process</h1>
-      <p class="subtitle">A Worldwide Network from Origin to Destination</p>
+      <h1>Qatar Cargo Logistics Process</h1>
+      <p class="subtitle">A Comprehensive Visual Guide from Collection to Delivery</p>
     </header>
-    
-    <div class="global-map">
-      <h2>Qatar Cargo's Global Network</h2>
-      <img src="/api/placeholder/800/450" alt="Qatar Cargo Global Network Map">
-    </div>
     
     <div class="process-flow">
       <!-- Step 1: Collection -->
       <div class="step">
         <div class="step-image">
-          <img src="/api/placeholder/600/400" alt="Cargo collection facility in Frankfurt">
-          <div class="location-tag">Frankfurt, Germany</div>
+          <img src="/api/placeholder/600/400" alt="Cargo collection process">
         </div>
         <div class="step-content">
           <span class="step-number">1</span>
@@ -252,21 +204,112 @@
             <li>Initial inspection and security screening</li>
             <li>Preparation of Air Waybill (AWB) and export documentation</li>
           </ul>
-          <div class="locations">
-            <p class="locations-title">Key Collection Hubs:</p>
-            <p>Frankfurt (Germany), London Heathrow (UK), Chicago O'Hare (USA), Shanghai Pudong (China), Singapore Changi, Mumbai (India), Johannesburg (South Africa), São Paulo (Brazil)</p>
-          </div>
         </div>
       </div>
       
       <div class="connector"></div>
       
-      <!-- Other Steps Here -->
+      <!-- Step 2: Warehouse Operations -->
+      <div class="step step-reversed">
+        <div class="step-image">
+          <img src="/api/placeholder/600/400" alt="Warehouse operations">
+        </div>
+        <div class="step-content">
+          <span class="step-number">2</span>
+          <h2 class="step-title">Warehouse Operations</h2>
+          <p class="step-description">After collection, shipments enter Qatar Cargo's state-of-the-art warehouses for processing, classification, and storage according to their specific requirements.</p>
+          <ul class="key-features">
+            <li>Classification by cargo type (general, perishable, pharmaceutical, live animals)</li>
+            <li>Temperature-controlled zones (2-8°C, 15-25°C, -20°C)</li>
+            <li>High-value storage with enhanced security measures</li>
+            <li>Real-time tracking using barcode/RFID technology</li>
+          </ul>
+        </div>
+      </div>
       
+      <div class="connector"></div>
+      
+      <!-- Step 3: Flight Planning -->
+      <div class="step">
+        <div class="step-image">
+          <img src="/api/placeholder/600/400" alt="Flight planning and load preparation">
+        </div>
+        <div class="step-content">
+          <span class="step-number">3</span>
+          <h2 class="step-title">Flight Planning & Load Preparation</h2>
+          <p class="step-description">Careful planning ensures optimal use of aircraft capacity and proper handling of different cargo types during loading.</p>
+          <ul class="key-features">
+            <li>Aircraft payload capacity assessment and optimization</li>
+            <li>ULD (Unit Load Device) preparation and allocation</li>
+            <li>Weight and balance calculations for flight safety</li>
+            <li>Special handling requirements implementation</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="connector"></div>
+      
+      <!-- Step 4: Transportation -->
+      <div class="step step-reversed">
+        <div class="step-image">
+          <img src="/api/placeholder/600/400" alt="Air transportation">
+        </div>
+        <div class="step-content">
+          <span class="step-number">4</span>
+          <h2 class="step-title">Transportation</h2>
+          <p class="step-description">Qatar Cargo utilizes a modern fleet of aircraft to transport shipments globally while monitoring them throughout the journey.</p>
+          <ul class="key-features">
+            <li>Dedicated freighter aircraft (Boeing 777F, Boeing 747-8F)</li>
+            <li>Hub-and-spoke model centered on Doha's Hamad International Airport</li>
+            <li>Real-time shipment tracking via GPS/IoT devices</li>
+            <li>Temperature and condition monitoring for sensitive cargo</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="connector"></div>
+      
+      <!-- Step 5: Arrival Processing -->
+      <div class="step">
+        <div class="step-image">
+          <img src="/api/placeholder/600/400" alt="Arrival processing">
+        </div>
+        <div class="step-content">
+          <span class="step-number">5</span>
+          <h2 class="step-title">Arrival Processing</h2>
+          <p class="step-description">When cargo arrives at the destination, it undergoes systematic unloading, documentation processing, and interim storage if needed.</p>
+          <ul class="key-features">
+            <li>Priority-based unloading sequence</li>
+            <li>Import documentation and customs clearance processing</li>
+            <li>Quality checks to ensure shipment integrity</li>
+            <li>Temporary storage allocation or cross-docking operations</li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="connector"></div>
+      
+      <!-- Step 6: Last-Mile Distribution -->
+      <div class="step step-reversed">
+        <div class="step-image">
+          <img src="/api/placeholder/600/400" alt="Last-mile delivery">
+        </div>
+        <div class="step-content">
+          <span class="step-number">6</span>
+          <h2 class="step-title">Last-Mile Distribution</h2>
+          <p class="step-description">The final phase involves delivering cargo to recipients efficiently and reliably, with proper documentation and confirmation.</p>
+          <ul class="key-features">
+            <li>Route optimization for efficient delivery</li>
+            <li>Vehicle allocation based on shipment characteristics</li>
+            <li>Electronic proof of delivery documentation</li>
+            <li>Customer satisfaction verification</li>
+          </ul>
+        </div>
+      </div>
     </div>
     
     <footer>
-      <p>© 2025 Qatar Cargo. All rights reserved.</p>
+      <p>Qatar Cargo - Member of Qatar Airways Group | Excellence in Global Logistics</p>
     </footer>
   </div>
 </body>
