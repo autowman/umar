@@ -67,6 +67,7 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
+      flex-direction: column;
     }
     .content-box {
       width: 90%;
@@ -76,12 +77,12 @@
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
-    #study-life {
+    #assignments {
       background: #e1ecf4;
       display: flex;
       justify-content: center;
     }
-    #hobbies {
+    #study-life {
       background: #d1f4e1;
       display: flex;
       justify-content: center;
@@ -89,6 +90,8 @@
     h2 {
       font-size: 2.5rem;
       color: #28a745;
+      text-align: center;
+      margin-bottom: 20px;
     }
     .image {
       width: 100%;
@@ -119,24 +122,22 @@
   <div class="container">
     <h1>Umarjon Ibragimov</h1>
     <h3>2217667</h3>
-    <p></p>
     <p>Final-year student, future business expert.</p>
     <p><a href="https://github.com/autowman" target="_blank">GitHub</a> | <a href="https://linkedin.com/in/umarjonibragimov" target="_blank">LinkedIn</a></p>
+    <button onclick="document.getElementById('assignments').scrollIntoView({ behavior: 'smooth' });">Assignments</button>
     <button onclick="document.getElementById('study-life').scrollIntoView({ behavior: 'smooth' });">Study Life</button>
-    <button onclick="document.getElementById('hobbies').scrollIntoView({ behavior: 'smooth' });">Hobbies</button>
   </div>
+  <section id="assignments">
+    <h2>Assignments</h2>
+    <div class="content-box">
+      <button onclick="window.location.href='one.html';">1. Qatar Cargo Logistics Process</button>
+    </div>
+  </section>
   <section id="study-life">
     <div class="content-box">
       <h2>Study Life</h2>
       <p>I'm a final-year student at Dong-A University, passionate about business strategy, management, and entrepreneurship.</p>
       <img src="https://images.pexels.com/photos/3183153/pexels-photo-3183153.jpeg" alt="Study life" class="image">
-    </div>
-  </section>
-  <section id="hobbies">
-    <div class="content-box">
-      <h2>Hobbies</h2>
-      <p>I enjoy reading business books, analyzing market trends, and networking with like-minded individuals.</p>
-      <img src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg" alt="Hobbies" class="image">
     </div>
   </section>
 </body>
