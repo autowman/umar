@@ -12,128 +12,34 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
     }
-
     body {
-      background-color: #f9f9f9;
+      background-color: #f4f4f4;
       color: #333;
-      line-height: 1.6;
     }
-
     .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
+      max-width: 100%;
+      margin: auto;
+      padding: 10px;
+      text-align: center;
     }
-
     header {
       text-align: center;
-      padding: 30px 0;
-      background: linear-gradient(135deg, #556B2F 0%, #808000 100%);
-      color: white;
-      border-radius: 10px;
-      margin-bottom: 30px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
-
-    h2 {
-      font-size: 1.8rem;
-      margin: 15px 0;
-      color: #556B2F;
-    }
-
-    .subtitle {
-      font-size: 1.2rem;
-      font-weight: 300;
-    }
-
-    .toolbar {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 20px;
-      background-color: white;
       padding: 15px;
+      background: #556B2F;
+      color: white;
       border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    }
-
-    .tool-section {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      padding: 10px;
-      border-right: 1px solid #eee;
-      min-width: 200px;
-    }
-
-    .tool-section:last-child {
-      border-right: none;
-    }
-
-    .tool-section h3 {
-      color: #556B2F;
       margin-bottom: 10px;
     }
-
-    .node-types {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-    }
-
-    .node-type {
-      padding: 8px 12px;
-      background-color: #f0f0f0;
-      border: 2px solid #556B2F;
-      border-radius: 5px;
-      cursor: grab;
-      color: #333;
-      transition: all 0.3s ease;
-    }
-
-    .node-type:hover {
-      background-color: #e0e0e0;
-      transform: translateY(-2px);
-    }
-
-    button {
-      padding: 8px 15px;
-      background: linear-gradient(135deg, #556B2F 0%, #808000 100%);
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
     .canvas-container {
-      position: relative;
       width: 100%;
-      height: 70vh;
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      height: 60vh;
+      background: white;
+      border: 2px dashed #ccc;
+      position: relative;
       overflow: hidden;
     }
-
-    #flowchart-canvas {
-      width: 100%;
-      height: 100%;
-      position: relative;
-    }
-
     .node {
       position: absolute;
       width: 180px;
@@ -142,918 +48,397 @@
       border: 2px solid #556B2F;
       border-radius: 8px;
       padding: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
       cursor: move;
-      user-select: none;
+      text-align: center;
       z-index: 10;
-      display: flex;
-      flex-direction: column;
     }
-
-    .node-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 5px;
+    .node input {
+      font-size: 16px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid #ddd;
+      padding: 5px;
+      margin-top: 5px;
     }
-
-    .node-title {
-      font-weight: bold;
-      color: #556B2F;
-    }
-
-    .node-buttons {
-      display: flex;
-      gap: 5px;
-    }
-
-    .node-button {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: none;
+    .connector {
+      position: absolute;
+      width: 15px;
+      height: 15px;
       background-color: #556B2F;
+      border-radius: 50%;
+      cursor: pointer;
+    }
+    .connector-right {
+      right: -7px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .connector-left {
+      left: -7px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      background: #556B2F;
       color: white;
+      border: none;
+      cursor: pointer;
+      padding: 2px 5px;
       font-size: 12px;
+      border-radius: 50%;
+    }
+    .connection {
+      position: absolute;
+      height: 2px;
+      background-color: #556B2F;
+      z-index: 5;
+      pointer-events: none;
+    }
+    .arrow {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 12px solid #556B2F;
+      transform-origin: center bottom;
+      pointer-events: none;
+    }
+    .button {
+      padding: 8px 12px;
+      margin: 5px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .add-btn { background: #4CAF50; color: white; }
+    .export-btn { background: #D9534F; color: white; }
+    .button:hover { opacity: 0.8; }
+    .home-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #556B2F;
+      padding: 10px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
     }
-
-    .node-content {
-      margin-top: 5px;
-    }
-
-    .connector {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background-color: #556B2F;
-      position: absolute;
-      cursor: pointer;
-      z-index: 15;
-    }
-
-    .connector-top {
-      top: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .connector-right {
-      right: -6px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .connector-bottom {
-      bottom: -6px;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-
-    .connector-left {
-      left: -6px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-
-    .connection {
-      position: absolute;
-      background-color: #556B2F;
-      height: 2px;
-      transform-origin: left center;
-      z-index: 5;
-    }
-
-    .connection:after {
-      content: '';
-      position: absolute;
-      right: -5px;
-      top: -4px;
-      width: 0;
-      height: 0;
-      border-left: 8px solid #556B2F;
-      border-top: 5px solid transparent;
-      border-bottom: 5px solid transparent;
-    }
-
-    .edit-form {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: white;
-      z-index: 20;
-      padding: 10px;
-      display: none;
-    }
-
-    .edit-form input, .edit-form textarea {
-      width: 100%;
-      padding: 5px;
-      margin-bottom: 5px;
-    }
-
-    .edit-form button {
-      padding: 5px 10px;
-      margin-right: 5px;
-    }
-
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 100;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0,0,0,0.5);
-    }
-
-    .modal-content {
-      background-color: white;
-      margin: 10% auto;
-      padding: 20px;
-      border-radius: 10px;
-      width: 50%;
-      max-width: 500px;
-    }
-
-    .close {
-      color: #aaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .close:hover {
-      color: black;
-    }
-
-    .tooltip {
-      position: absolute;
-      background-color: #556B2F;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 12px;
-      z-index: 50;
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.3s;
-    }
-
-    .step-number {
-      display: inline-block;
+    .home-icon {
       width: 24px;
       height: 24px;
-      background-color: #556B2F;
-      color: white;
-      border-radius: 50%;
-      text-align: center;
-      line-height: 24px;
-      font-size: 0.9rem;
-      font-weight: bold;
-      margin-right: 8px;
-    }
-
-    footer {
-      text-align: center;
-      margin-top: 30px;
-      padding: 20px;
-      color: #777;
-      font-size: 0.9rem;
-    }
-
-    @media (max-width: 768px) {
-      .toolbar {
-        flex-direction: column;
-      }
-
-      .tool-section {
-        border-right: none;
-        border-bottom: 1px solid #eee;
-        padding-bottom: 15px;
-      }
-
-      .canvas-container {
-        height: 50vh;
-      }
-
-      .modal-content {
-        width: 90%;
-      }
+      stroke: white;
     }
   </style>
 </head>
 <body>
+  <a href="index.html" class="home-button" title="Go to Homepage">
+    <svg class="home-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+      <polyline points="9 22 9 12 15 12 15 22"></polyline>
+    </svg>
+  </a>
   <div class="container">
     <header>
       <h1>Logistics Flowchart Builder</h1>
-      <h3 class="subtitle">Create and customize your logistics process flow</h3>
     </header>
-
-    <div class="toolbar">
-      <div class="tool-section">
-        <h3>Add Components</h3>
-        <div class="node-types">
-          <div class="node-type" data-type="collection">Collection</div>
-          <div class="node-type" data-type="warehouse">Warehouse</div>
-          <div class="node-type" data-type="transport">Transport</div>
-          <div class="node-type" data-type="distribution">Distribution</div>
-          <div class="node-type" data-type="processing">Processing</div>
-          <div class="node-type" data-type="supplier">Supplier</div>
-          <div class="node-type" data-type="customer">Customer</div>
-        </div>
-      </div>
-
-      <div class="tool-section">
-        <h3>Actions</h3>
-        <button id="clear-canvas">Clear Canvas</button>
-        <button id="save-template">Save Template</button>
-        <button id="load-template">Load Template</button>
-      </div>
-
-      <div class="tool-section">
-        <h3>Export</h3>
-        <button id="export-png">Export as PNG</button>
-        <button id="export-pdf">Export as PDF</button>
-      </div>
-    </div>
-
-    <div class="canvas-container">
-      <div id="flowchart-canvas"></div>
-    </div>
-
-    <div id="edit-modal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Edit Node</h2>
-        <form id="node-edit-form">
-          <label for="node-title">Title:</label>
-          <input type="text" id="node-title" required>
-
-          <label for="node-description">Description:</label>
-          <textarea id="node-description" rows="3"></textarea>
-
-          <label for="node-location">Location:</label>
-          <input type="text" id="node-location">
-
-          <label for="node-step">Step Number:</label>
-          <input type="number" id="node-step" min="1">
-
-          <button type="submit">Save</button>
-          <button type="button" id="cancel-edit">Cancel</button>
-        </form>
-      </div>
-    </div>
-
-    <div id="tooltip" class="tooltip"></div>
-
-    <footer>
-      <p>© 2025 Logistics Flowchart Builder. All Rights Reserved.</p>
-    </footer>
+    <button class="button add-btn" onclick="addNode()">Add Node</button>
+    <div class="canvas-container" id="flowchart-canvas"></div>
+    <br>
+    <button class="button export-btn" onclick="exportAsPNG()">Export as PNG</button>
+    <button class="button export-btn" onclick="exportAsPDF()">Export as PDF</button>
   </div>
-
   <script>
-    // Global variables
-    let nodes = [];
-    let connections = [];
-    let draggedNode = null;
-    let nodeCounter = 1;
-    let currentConnection = null;
-    let editingNode = null;
-    let modalVisible = false;
+    var nodes = [];
+    var connections = [];
+    var connectingMode = false;
+    var startConnector = null;
 
-    // DOM elements
-    const canvas = document.getElementById('flowchart-canvas');
-    const nodeTypes = document.querySelectorAll('.node-type');
-    const clearButton = document.getElementById('clear-canvas');
-    const saveButton = document.getElementById('save-template');
-    const loadButton = document.getElementById('load-template');
-    const exportPngButton = document.getElementById('export-png');
-    const exportPdfButton = document.getElementById('export-pdf');
-    const editModal = document.getElementById('edit-modal');
-    const editForm = document.getElementById('node-edit-form');
-    const closeModal = document.querySelector('.close');
-    const cancelEdit = document.getElementById('cancel-edit');
-    const tooltip = document.getElementById('tooltip');
-
-    // Initialize the app
-    function init() {
-      setupEventListeners();
-      setupInteractJS();
-    }
-
-    // Setup event listeners
-    function setupEventListeners() {
-      // Node type drag
-      nodeTypes.forEach(nodeType => {
-        nodeType.addEventListener('mousedown', function(e) {
-          const type = this.getAttribute('data-type');
-          createNode(e.clientX, e.clientY, type);
-        });
-      });
-
-      // Clear canvas button
-      clearButton.addEventListener('click', () => {
-        if (confirm('Are you sure you want to clear the canvas? All nodes and connections will be removed.')) {
-          clearCanvas();
-        }
-      });
-
-      // Save template button
-      saveButton.addEventListener('click', saveTemplate);
-
-      // Load template button
-      loadButton.addEventListener('click', () => {
-        if (confirm('Loading a template will replace the current flowchart. Continue?')) {
-          loadTemplate();
-        }
-      });
-
-      // Export buttons
-      exportPngButton.addEventListener('click', exportAsPNG);
-      exportPdfButton.addEventListener('click', exportAsPDF);
-
-      // Modal close button
-      closeModal.addEventListener('click', closeEditModal);
-
-      // Cancel edit button
-      cancelEdit.addEventListener('click', closeEditModal);
-
-      // Edit form submit
-      editForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        saveNodeEdit();
-      });
-    }
-
-    // Setup InteractJS library
-    function setupInteractJS() {
-      // Make nodes draggable
-      interact('.node')
-        .draggable({
-          inertia: true,
-          modifiers: [
-            interact.modifiers.restrictRect({
-              restriction: 'parent',
-              endOnly: true
-            })
-          ],
-          autoScroll: true,
-          listeners: {
-            start(event) {
-              const nodeId = event.target.getAttribute('data-id');
-              draggedNode = findNodeById(nodeId);
-            },
-            move(event) {
-              const target = event.target;
-
-              // Update node position
-              const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-              const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-
-              // Update the element's position
-              target.style.transform = `translate(${x}px, ${y}px)`;
-              target.setAttribute('data-x', x);
-              target.setAttribute('data-y', y);
-
-              // Update node data
-              if (draggedNode) {
-                draggedNode.x = x;
-                draggedNode.y = y;
-              }
-
-              // Update connections
-              updateConnections();
-            },
-            end(event) {
-              draggedNode = null;
-            }
-          }
-        });
-
-      // Make connectors draggable to create connections
-      interact('.connector')
-        .draggable({
-          listeners: {
-            start(event) {
-              const nodeId = event.target.parentNode.getAttribute('data-id');
-              const connectorType = event.target.getAttribute('data-type');
-
-              // Create temporary connection
-              currentConnection = {
-                sourceId: nodeId,
-                sourceType: connectorType,
-                sourceX: parseInt(event.target.parentNode.style.left) + (connectorType === 'right' ? 180 : connectorType === 'left' ? 0 : 90),
-                sourceY: parseInt(event.target.parentNode.style.top) + (connectorType === 'bottom' ? 80 : connectorType === 'top' ? 0 : 40),
-                targetX: event.clientX - canvas.getBoundingClientRect().left,
-                targetY: event.clientY - canvas.getBoundingClientRect().top
-              };
-
-              // Create connection element
-              const connection = document.createElement('div');
-              connection.classList.add('connection');
-              connection.setAttribute('data-temp', 'true');
-              canvas.appendChild(connection);
-
-              updateConnectionLine(connection, currentConnection);
-            },
-            move(event) {
-              if (currentConnection) {
-                currentConnection.targetX = event.clientX - canvas.getBoundingClientRect().left;
-                currentConnection.targetY = event.clientY - canvas.getBoundingClientRect().top;
-
-                const tempConnection = document.querySelector('.connection[data-temp="true"]');
-                if (tempConnection) {
-                  updateConnectionLine(tempConnection, currentConnection);
-                }
-              }
-            },
-            end(event) {
-              const tempConnection = document.querySelector('.connection[data-temp="true"]');
-              if (tempConnection) {
-                tempConnection.remove();
-              }
-
-              // Check if released over a connector
-              const targetElement = document.elementFromPoint(event.clientX, event.clientY);
-
-              if (targetElement && targetElement.classList.contains('connector')) {
-                const targetNodeId = targetElement.parentNode.getAttribute('data-id');
-                const targetType = targetElement.getAttribute('data-type');
-
-                // Don't connect to the same node
-                if (targetNodeId !== currentConnection.sourceId) {
-                  // Create final connection
-                  const connection = {
-                    id: `conn-${connections.length}`,
-                    sourceId: currentConnection.sourceId,
-                    sourceType: currentConnection.sourceType,
-                    targetId: targetNodeId,
-                    targetType: targetType
-                  };
-
-                  connections.push(connection);
-                  createConnectionElement(connection);
-                }
-              }
-
-              currentConnection = null;
-            }
-          }
-        });
-    }
-
-    // Create a new node
-    function createNode(x, y, type) {
-      const id = `node-${nodeCounter++}`;
-      const canvasRect = canvas.getBoundingClientRect();
-
-      const node = {
-        id: id,
-        type: type,
-        title: capitalizeFirstLetter(type),
-        description: '',
-        location: '',
-        step: nodes.length + 1,
-        x: x - canvasRect.left - 90,
-        y: y - canvasRect.top - 40
-      };
-
-      nodes.push(node);
-      createNodeElement(node);
-    }
-
-    // Create HTML element for a node
-    function createNodeElement(node) {
-      const nodeElement = document.createElement('div');
-      nodeElement.classList.add('node');
-      nodeElement.setAttribute('data-id', node.id);
-      nodeElement.setAttribute('data-type', node.type);
-      nodeElement.style.left = '0px';
-      nodeElement.style.top = '0px';
-      nodeElement.style.transform = `translate(${node.x}px, ${node.y}px)`;
-      nodeElement.setAttribute('data-x', node.x);
-      nodeElement.setAttribute('data-y', node.y);
-
-      // Create node content
-      nodeElement.innerHTML = `
-        <div class="node-header">
-          ${node.step ? `<span class="step-number">${node.step}</span>` : ''}
-          <span class="node-title">${node.title}</span>
-          <div class="node-buttons">
-            <div class="node-button edit-btn" title="Edit">✎</div>
-            <div class="node-button delete-btn" title="Delete">×</div>
-          </div>
-        </div>
-        <div class="node-content">
-          <div class="node-description">${node.description}</div>
-          ${node.location ? `<div class="node-location"><small>Location: ${node.location}</small></div>` : ''}
-        </div>
-        <div class="connector connector-top" data-type="top"></div>
-        <div class="connector connector-right" data-type="right"></div>
-        <div class="connector connector-bottom" data-type="bottom"></div>
-        <div class="connector connector-left" data-type="left"></div>
+    function addNode() {
+      const canvas = document.getElementById('flowchart-canvas');
+      const node = document.createElement('div');
+      node.classList.add('node');
+      node.style.left = `${50 + nodes.length * 20}px`;
+      node.style.top = `${50 + nodes.length * 20}px`;
+      
+      // Add delete button and input with larger font size
+      node.innerHTML = `
+        <button class='delete-btn' onclick='deleteNode(this)'>X</button>
+        <input type='text' placeholder='Enter text'>
+        <div class='connector connector-right' data-node-id='${nodes.length}' data-side='right'></div>
+        <div class='connector connector-left' data-node-id='${nodes.length}' data-side='left'></div>
       `;
-
-      // Add event listeners
-      const editBtn = nodeElement.querySelector('.edit-btn');
-      const deleteBtn = nodeElement.querySelector('.delete-btn');
-
-      editBtn.addEventListener('click', () => {
-        openEditModal(node);
-      });
-
-      deleteBtn.addEventListener('click', () => {
-        deleteNode(node.id);
-      });
-
-      // Add tooltip behavior for connectors
-      const connectors = nodeElement.querySelectorAll('.connector');
-      connectors.forEach(connector => {
-        connector.addEventListener('mouseenter', () => {
-          showTooltip('Drag to connect', connector);
-        });
-
-        connector.addEventListener('mouseleave', () => {
-          hideTooltip();
-        });
-      });
-
-      canvas.appendChild(nodeElement);
-
-      // Re-initialize interact.js for the new node
-      setupInteractJS();
+      
+      canvas.appendChild(node);
+      nodes.push(node);
+      makeDraggable(node);
+      setupConnectors(node);
     }
 
-    // Create HTML element for a connection
-    function createConnectionElement(connection) {
-      const connectionElement = document.createElement('div');
-      connectionElement.classList.add('connection');
-      connectionElement.setAttribute('data-id', connection.id);
-      connectionElement.setAttribute('data-source', connection.sourceId);
-      connectionElement.setAttribute('data-target', connection.targetId);
-
-      // Add double-click to delete
-      connectionElement.addEventListener('dblclick', () => {
-        deleteConnection(connection.id);
+    function setupConnectors(node) {
+      const rightConnector = node.querySelector('.connector-right');
+      const leftConnector = node.querySelector('.connector-left');
+      
+      rightConnector.addEventListener('click', function() {
+        if (connectingMode && startConnector) {
+          // Complete the connection
+          createConnection(startConnector, this);
+          resetConnectingMode();
+        } else {
+          // Start a new connection
+          startConnector = this;
+          connectingMode = true;
+        }
       });
-
-      // Add tooltip
-      connectionElement.addEventListener('mouseenter', () => {
-        showTooltip('Double-click to delete', connectionElement);
-      });
-
-      connectionElement.addEventListener('mouseleave', () => {
-        hideTooltip();
-      });
-
-      canvas.appendChild(connectionElement);
-      updateConnection(connection);
-    }
-
-    // Update all connections
-    function updateConnections() {
-      connections.forEach(connection => {
-        updateConnection(connection);
+      
+      leftConnector.addEventListener('click', function() {
+        if (connectingMode && startConnector) {
+          // Complete the connection
+          createConnection(startConnector, this);
+          resetConnectingMode();
+        } else {
+          // Start a new connection
+          startConnector = this;
+          connectingMode = true;
+        }
       });
     }
 
-    // Update a specific connection
-    function updateConnection(connection) {
-      const connectionElement = document.querySelector(`.connection[data-id="${connection.id}"]`);
-      if (!connectionElement) return;
+    function resetConnectingMode() {
+      connectingMode = false;
+      startConnector = null;
+    }
 
-      const sourceNode = document.querySelector(`.node[data-id="${connection.sourceId}"]`);
-      const targetNode = document.querySelector(`.node[data-id="${connection.targetId}"]`);
-
-      if (!sourceNode || !targetNode) {
-        connectionElement.remove();
-        connections = connections.filter(conn => conn.id !== connection.id);
+    function createConnection(startConnector, endConnector) {
+      // Don't connect to the same node
+      if (startConnector.dataset.nodeId === endConnector.dataset.nodeId) {
         return;
       }
-
-      const sourceX = parseInt(sourceNode.getAttribute('data-x')) + getConnectorPosition(connection.sourceType, 'x');
-      const sourceY = parseInt(sourceNode.getAttribute('data-y')) + getConnectorPosition(connection.sourceType, 'y');
-      const targetX = parseInt(targetNode.getAttribute('data-x')) + getConnectorPosition(connection.targetType, 'x');
-      const targetY = parseInt(targetNode.getAttribute('data-y')) + getConnectorPosition(connection.targetType, 'y');
-
-      updateConnectionLine(connectionElement, {
-        sourceX,
-        sourceY,
-        targetX,
-        targetY
-      });
-    }
-
-    // Update the visual appearance of a connection line
-    function updateConnectionLine(element, connection) {
-      const dx = connection.targetX - connection.sourceX;
-      const dy = connection.targetY - connection.sourceY;
-      const length = Math.sqrt(dx * dx + dy * dy);
-      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-
-      element.style.width = `${length}px`;
-      element.style.left = `${connection.sourceX}px`;
-      element.style.top = `${connection.sourceY}px`;
-      element.style.transform = `rotate(${angle}deg)`;
-    }
-
-    // Get connector position based on type
-    function getConnectorPosition(type, axis) {
-      const nodeWidth = 180;
-      const nodeHeight = 80;
-
-      switch (type) {
-        case 'top':
-          return axis === 'x' ? nodeWidth / 2 : 0;
-        case 'right':
-          return axis === 'x' ? nodeWidth : nodeHeight / 2;
-        case 'bottom':
-          return axis === 'x' ? nodeWidth / 2 : nodeHeight;
-        case 'left':
-          return axis === 'x' ? 0 : nodeHeight / 2;
-        default:
-          return 0;
-      }
-    }
-
-    // Delete a node
-    function deleteNode(nodeId) {
-      if (confirm('Are you sure you want to delete this node?')) {
-        // Remove HTML element
-        const nodeElement = document.querySelector(`.node[data-id="${nodeId}"]`);
-        if (nodeElement) {
-          nodeElement.remove();
-        }
-
-        // Remove connections involving this node
-        const relatedConnections = connections.filter(
-          conn => conn.sourceId === nodeId || conn.targetId === nodeId
-        );
-
-        relatedConnections.forEach(conn => {
-          deleteConnection(conn.id, false);
-        });
-
-        // Remove from data array
-        nodes = nodes.filter(node => node.id !== nodeId);
-
-        // Update step numbers
-        updateStepNumbers();
-      }
-    }
-
-    // Delete a connection
-    function deleteConnection(connectionId, confirm = true) {
-      if (!confirm || window.confirm('Are you sure you want to delete this connection?')) {
-        // Remove HTML element
-        const connectionElement = document.querySelector(`.connection[data-id="${connectionId}"]`);
-        if (connectionElement) {
-          connectionElement.remove();
-        }
-
-        // Remove from data array
-        connections = connections.filter(conn => conn.id !== connectionId);
-      }
-    }
-
-    // Open edit modal for a node
-    function openEditModal(node) {
-      editingNode = node;
-
-      // Fill form with node data
-      document.getElementById('node-title').value = node.title;
-      document.getElementById('node-description').value = node.description || '';
-      document.getElementById('node-location').value = node.location || '';
-      document.getElementById('node-step').value = node.step || '';
-
-      // Show modal
-      editModal.style.display = 'block';
-      modalVisible = true;
-
-      // Focus on title field
-      document.getElementById('node-title').focus();
-    }
-
-    // Close edit modal
-    function closeEditModal() {
-      editModal.style.display = 'none';
-      modalVisible = false;
-      editingNode = null;
-    }
-
-    // Save node edit
-    function saveNodeEdit() {
-      if (!editingNode) return;
-
-      const title = document.getElementById('node-title').value;
-      const description = document.getElementById('node-description').value;
-      const location = document.getElementById('node-location').value;
-      const step = parseInt(document.getElementById('node-step').value) || '';
-
-      // Update node data
-      editingNode.title = title;
-      editingNode.description = description;
-      editingNode.location = location;
-
-      // Handle step number change
-      if (step !== editingNode.step) {
-        editingNode.step = step;
-        updateStepNumbers();
-      }
-
-      // Update node element
-      const nodeElement = document.querySelector(`.node[data-id="${editingNode.id}"]`);
-      if (nodeElement) {
-        const titleElement = nodeElement.querySelector('.node-title');
-        const descriptionElement = nodeElement.querySelector('.node-description');
-        const stepElement = nodeElement.querySelector('.step-number');
-
-        titleElement.textContent = title;
-        descriptionElement.textContent = description;
-
-        // Update or create step number
-        if (step) {
-          if (stepElement) {
-            stepElement.textContent = step;
-          } else {
-            const stepSpan = document.createElement('span');
-            stepSpan.classList.add('step-number');
-            stepSpan.textContent = step;
-            nodeElement.querySelector('.node-header').prepend(stepSpan);
-          }
-        } else if (stepElement) {
-          stepElement.remove();
-        }
-
-        // Update or remove location
-        let locationElement = nodeElement.querySelector('.node-location');
-        if (location) {
-          if (locationElement) {
-            locationElement.innerHTML = `<small>Location: ${location}</small>`;
-          } else {
-            locationElement = document.createElement('div');
-            locationElement.classList.add('node-location');
-            locationElement.innerHTML = `<small>Location: ${location}</small>`;
-            nodeElement.querySelector('.node-content').appendChild(locationElement);
-          }
-        } else if (locationElement) {
-          locationElement.remove();
-        }
-      }
-
-      closeEditModal();
-    }
-
-    // Update step numbers to ensure they're sequential
-    function updateStepNumbers() {
-      // Get nodes with step numbers
-      const nodesWithSteps = nodes.filter(node => node.step).sort((a, b) => a.step - b.step);
-
-      // Update step numbers
-      nodesWithSteps.forEach((node, index) => {
-        node.step = index + 1;
-
-        // Update DOM
-        const nodeElement = document.querySelector(`.node[data-id="${node.id}"]`);
-        if (nodeElement) {
-          const stepElement = nodeElement.querySelector('.step-number');
-          if (stepElement) {
-            stepElement.textContent = node.step;
-          }
-        }
-      });
-    }
-
-    // Clear the canvas
-    function clearCanvas() {
-      // Remove all nodes
-      document.querySelectorAll('.node').forEach(node => node.remove());
-
-      // Remove all connections
-      document.querySelectorAll('.connection').forEach(conn => conn.remove());
-
-      // Clear data arrays
-      nodes = [];
-      connections = [];
-      nodeCounter = 1;
-    }
-
-    // Save the current template
-    function saveTemplate() {
-      const template = {
-        nodes: nodes,
-        connections: connections,
-        counter: nodeCounter
+      
+      const canvas = document.getElementById('flowchart-canvas');
+      const connection = document.createElement('div');
+      connection.classList.add('connection');
+      
+      const arrow = document.createElement('div');
+      arrow.classList.add('arrow');
+      
+      canvas.appendChild(connection);
+      canvas.appendChild(arrow);
+      
+      const connectionData = {
+        startNodeId: parseInt(startConnector.dataset.nodeId),
+        endNodeId: parseInt(endConnector.dataset.nodeId),
+        startSide: startConnector.dataset.side,
+        endSide: endConnector.dataset.side,
+        connectionElement: connection,
+        arrowElement: arrow
       };
-
-      const templateJson = JSON.stringify(template);
-      localStorage.setItem('logisticsTemplate', templateJson);
-
-      alert('Template saved successfully!');
+      
+      connections.push(connectionData);
+      updateConnection(connectionData);
     }
 
-    // Load a saved template
-    function loadTemplate() {
-      const templateJson = localStorage.getItem('logisticsTemplate');
-
-      if (!templateJson) {
-        alert('No saved template found!');
+    function updateConnection(connectionData) {
+      const startNode = nodes[connectionData.startNodeId];
+      const endNode = nodes[connectionData.endNodeId];
+      
+      if (!startNode || !endNode) {
+        connectionData.connectionElement.remove();
+        connectionData.arrowElement.remove();
+        connections = connections.filter(conn => conn !== connectionData);
         return;
       }
-
-      try {
-        // Clear current canvas
-        clearCanvas();
-
-        // Parse the template
-        const template = JSON.parse(templateJson);
-
-        // Load nodes
-        nodes = template.nodes;
-        connections = template.connections;
-        nodeCounter = template.counter || nodes.length + 1;
-
-        // Create elements for nodes
-        nodes.forEach(node => {
-          createNodeElement(node);
-        });
-
-        // Create elements for connections
-        connections.forEach(connection => {
-          createConnectionElement(connection);
-        });
-
-        alert('Template loaded successfully!');
-      } catch (error) {
-        console.error('Error loading template:', error);
-        alert('Error loading template. Please try again.');
-      }
+      
+      const startRect = startNode.getBoundingClientRect();
+      const endRect = endNode.getBoundingClientRect();
+      const canvasRect = document.getElementById('flowchart-canvas').getBoundingClientRect();
+      
+      // Calculate connector positions
+      const startX = connectionData.startSide === 'right' ? 
+        startRect.right - canvasRect.left :
+        startRect.left - canvasRect.left;
+      const startY = startRect.top + startRect.height/2 - canvasRect.top;
+      
+      const endX = connectionData.endSide === 'right' ? 
+        endRect.right - canvasRect.left :
+        endRect.left - canvasRect.left;
+      const endY = endRect.top + endRect.height/2 - canvasRect.top;
+      
+      // Calculate length and angle of the connection
+      const dx = endX - startX;
+      const dy = endY - startY;
+      const length = Math.sqrt(dx*dx + dy*dy);
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      
+      // Position the connection line
+      connectionData.connectionElement.style.width = `${length}px`;
+      connectionData.connectionElement.style.left = `${startX}px`;
+      connectionData.connectionElement.style.top = `${startY}px`;
+      connectionData.connectionElement.style.transform = `rotate(${angle}deg)`;
+      connectionData.connectionElement.style.transformOrigin = '0 0';
+      
+      // Position the arrow
+      connectionData.arrowElement.style.left = `${endX}px`;
+      connectionData.arrowElement.style.top = `${endY}px`;
+      connectionData.arrowElement.style.transform = `rotate(${angle - 90}deg)`;
+      connectionData.arrowElement.style.transformOrigin = 'center';
     }
 
-    // Export flowchart as PNG
+    function updateAllConnections() {
+      connections.forEach(connectionData => {
+        updateConnection(connectionData);
+      });
+    }
+
+    function makeDraggable(element) {
+      interact(element).draggable({
+        inertia: true,
+        modifiers: [
+          interact.modifiers.restrictRect({ restriction: 'parent', endOnly: true })
+        ],
+        listeners: {
+          move(event) {
+            const x = (parseFloat(element.getAttribute('data-x')) || 0) + event.dx;
+            const y = (parseFloat(element.getAttribute('data-y')) || 0) + event.dy;
+            element.style.transform = `translate(${x}px, ${y}px)`;
+            element.setAttribute('data-x', x);
+            element.setAttribute('data-y', y);
+            updateAllConnections();
+          }
+        }
+      });
+    }
+
+    function deleteNode(button) {
+      const nodeElement = button.parentElement;
+      const nodeId = nodes.indexOf(nodeElement);
+      
+      // Remove connections associated with this node
+      connections = connections.filter(conn => {
+        if (conn.startNodeId === nodeId || conn.endNodeId === nodeId) {
+          conn.connectionElement.remove();
+          conn.arrowElement.remove();
+          return false;
+        }
+        return true;
+      });
+      
+      // Update node IDs for connections after removal
+      connections.forEach(conn => {
+        if (conn.startNodeId > nodeId) {
+          conn.startNodeId--;
+        }
+        if (conn.endNodeId > nodeId) {
+          conn.endNodeId--;
+        }
+      });
+      
+      // Remove the node and update nodes array
+      nodeElement.remove();
+      nodes = nodes.filter(node => node !== nodeElement);
+      
+      // Update connectors' data-node-id attributes
+      nodes.forEach((node, index) => {
+        const rightConnector = node.querySelector('.connector-right');
+        const leftConnector = node.querySelector('.connector-left');
+        if (rightConnector) rightConnector.dataset.nodeId = index;
+        if (leftConnector) leftConnector.dataset.nodeId = index;
+      });
+    }
+
     function exportAsPNG() {
-      html2canvas(canvas).then(canvas => {
+      // Clone the canvas and prepare it for export
+      const original = document.getElementById('flowchart-canvas');
+      const clone = original.cloneNode(true);
+      document.body.appendChild(clone);
+      
+      // Remove connectors and fix positions for export
+      const clonedNodes = clone.querySelectorAll('.node');
+      clonedNodes.forEach((node, index) => {
+        // Remove connectors
+        node.querySelectorAll('.connector').forEach(conn => conn.remove());
+        
+        // Fix position for export
+        const originalNode = nodes[index];
+        const x = parseFloat(originalNode.getAttribute('data-x')) || 0;
+        const y = parseFloat(originalNode.getAttribute('data-y')) || 0;
+        
+        node.style.transform = '';
+        node.style.left = `${parseInt(node.style.left) + x}px`;
+        node.style.top = `${parseInt(node.style.top) + y}px`;
+      });
+      
+      // Export
+      html2canvas(clone, {
+        backgroundColor: 'white',
+        scale: 2
+      }).then(canvas => {
         const link = document.createElement('a');
-        link.download = 'logistics-flowchart.png';
+        link.download = 'flowchart.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
+        clone.remove();
       });
     }
 
-    // Export flowchart as PDF
     function exportAsPDF() {
-      html2canvas(canvas).then(canvas => {
+      // Clone the canvas and prepare it for export
+      const original = document.getElementById('flowchart-canvas');
+      const clone = original.cloneNode(true);
+      document.body.appendChild(clone);
+      
+      // Remove connectors and fix positions for export
+      const clonedNodes = clone.querySelectorAll('.node');
+      clonedNodes.forEach((node, index) => {
+        // Remove connectors
+        node.querySelectorAll('.connector').forEach(conn => conn.remove());
+        
+        // Fix position for export
+        const originalNode = nodes[index];
+        const x = parseFloat(originalNode.getAttribute('data-x')) || 0;
+        const y = parseFloat(originalNode.getAttribute('data-y')) || 0;
+        
+        node.style.transform = '';
+        node.style.left = `${parseInt(node.style.left) + x}px`;
+        node.style.top = `${parseInt(node.style.top) + y}px`;
+      });
+      
+      // Export
+      html2canvas(clone, {
+        backgroundColor: 'white',
+        scale: 2
+      }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
-        const pdf = new jspdf.jsPDF({
-          orientation: 'landscape',
-          unit: 'mm'
-        });
-
+        const pdf = new jspdf.jsPDF('landscape');
         const imgProps = pdf.getImageProperties(imgData);
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-
-        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-        pdf.save('logistics-flowchart.pdf');
+        pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth - 20, pdfHeight - 20);
+        pdf.save('flowchart.pdf');
+        clone.remove();
       });
     }
 
-    // Show tooltip
-    function showTooltip(text, element) {
-      const rect = element.getBoundingClientRect();
-      const canvasRect = canvas.getBoundingClientRect();
+    // Add keyboard event to cancel connection mode
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && connectingMode) {
+        resetConnectingMode();
+      }
+    });
 
-      tooltip.textContent = text;
-      tooltip.style.left = (rect.left - canvasRect.left + rect.width / 2) + 'px';
-      tooltip.style.top = (rect.top - canvasRect.top - 30) + 'px';
-      tooltip.style.opacity = '1';
-    }
-
-    // Hide tooltip
-    function hideTooltip() {
-      tooltip.style.opacity = '0';
-    }
-
-    // Find node by id
-    function findNodeById(id) {
-      return nodes.find(node => node.id === id);
-    }
-
-    // Capitalize the first letter of a string
-    function capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    // Initialize the application
-    document.addEventListener('DOMContentLoaded', init);
+    // Add click event on canvas to cancel connection mode
+    document.getElementById('flowchart-canvas').addEventListener('click', function(event) {
+      if (connectingMode && event.target === this) {
+        resetConnectingMode();
+      }
+    });
   </script>
 </body>
 </html>
