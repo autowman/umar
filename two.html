@@ -12,91 +12,141 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
     }
+    
     body {
-      background-color: #f4f4f4;
+      background-color: #f9f9f9;
       color: #333;
+      line-height: 1.6;
     }
+    
     .container {
-      max-width: 100%;
-      margin: auto;
-      padding: 10px;
-      text-align: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
     }
+    
     header {
       text-align: center;
-      padding: 15px;
-      background: #556B2F;
+      padding: 30px 0;
+      background: linear-gradient(135deg, #556B2F 0%, #3A5311 100%);
       color: white;
       border-radius: 10px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      font-size: 2.5rem;
       margin-bottom: 10px;
     }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+    
     .canvas-container {
       width: 100%;
-      height: 60vh;
+      height: 70vh;
       background: white;
-      border: 2px dashed #ccc;
+      border: 2px solid #ccc;
       position: relative;
       overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      margin: 20px 0;
     }
+    
+    .control-panel {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
     .node {
       position: absolute;
-      width: 180px;
-      min-height: 80px;
+      width: 200px;
+      min-height: 90px;
       background-color: white;
       border: 2px solid #556B2F;
       border-radius: 8px;
-      padding: 10px;
+      padding: 15px;
       cursor: move;
       text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
       z-index: 10;
     }
+    
+    .node:hover {
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
     .node input {
-      font-size: 16px;
+      font-size: 18px;
       width: 90%;
       text-align: center;
       border: 1px solid #ddd;
-      padding: 5px;
-      margin-top: 5px;
+      padding: 8px;
+      margin-top: 8px;
+      border-radius: 5px;
     }
+    
     .connector {
       position: absolute;
-      width: 15px;
-      height: 15px;
+      width: 16px;
+      height: 16px;
       background-color: #556B2F;
       border-radius: 50%;
       cursor: pointer;
+      transition: transform 0.2s ease;
     }
+    
+    .connector:hover {
+      transform: scale(1.2);
+    }
+    
     .connector-right {
-      right: -7px;
+      right: -8px;
       top: 50%;
       transform: translateY(-50%);
     }
+    
     .connector-left {
-      left: -7px;
+      left: -8px;
       top: 50%;
       transform: translateY(-50%);
     }
+    
     .delete-btn {
       position: absolute;
       top: 5px;
-      left: 5px;
+      right: 5px;
       background: #556B2F;
       color: white;
       border: none;
       cursor: pointer;
-      padding: 2px 5px;
+      padding: 4px 8px;
       font-size: 12px;
-      border-radius: 50%;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
     }
+    
+    .delete-btn:hover {
+      background-color: #8B0000;
+    }
+    
     .connection {
       position: absolute;
-      height: 2px;
+      height: 3px;
       background-color: #556B2F;
       z-index: 5;
       pointer-events: none;
     }
+    
     .arrow {
       position: absolute;
       width: 0;
@@ -107,54 +157,165 @@
       transform-origin: center bottom;
       pointer-events: none;
     }
+    
     .button {
-      padding: 8px 12px;
-      margin: 5px;
+      padding: 12px 18px;
       border: none;
       border-radius: 5px;
-      font-size: 14px;
+      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
       transition: 0.3s;
+      color: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
-    .add-btn { background: #4CAF50; color: white; }
-    .export-btn { background: #D9534F; color: white; }
-    .button:hover { opacity: 0.8; }
+    
+    .add-btn { 
+      background: #556B2F; 
+    }
+    
+    .export-btn { 
+      background: #556B2F; 
+    }
+    
+    .button:hover { 
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .button:active {
+      transform: translateY(0);
+    }
+    
+    .instructions {
+      background-color: #f0f0f0;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid #556B2F;
+    }
+    
+    .instructions h3 {
+      color: #556B2F;
+      margin-bottom: 10px;
+    }
+    
+    .instructions ul {
+      list-style-type: none;
+      padding-left: 10px;
+    }
+    
+    .instructions li {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 8px;
+    }
+    
+    .instructions li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #556B2F;
+      font-weight: bold;
+    }
+    
     .home-button {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #556B2F;
-      padding: 10px;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #556B2F 0%, #3A5311 100%);
+      color: white;
+      border: none;
       border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 1000;
     }
+    
+    .home-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+    
     .home-icon {
       width: 24px;
       height: 24px;
       stroke: white;
+      stroke-width: 2px;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding: 20px;
+      color: #777;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .button {
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+      
+      .node {
+        width: 180px;
+      }
+      
+      .home-button {
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <header>
+      <h1>Logistics Flowchart Builder</h1>
+      <p class="subtitle">Create professional logistics flow diagrams</p>
+    </header>
+    
+    <div class="instructions">
+      <h3>Using the Flowchart Builder</h3>
+      <ul>
+        <li>Click "Add Node" to create a new process step</li>
+        <li>Drag nodes to position them in your flowchart</li>
+        <li>Click connectors (circles) to create directional arrows between steps</li>
+        <li>Use the export buttons to save your diagram as PNG or PDF</li>
+      </ul>
+    </div>
+    
+    <div class="control-panel">
+      <button class="button add-btn" onclick="addNode()">Add Node</button>
+      <button class="button export-btn" onclick="exportAsPNG()">Export as PNG</button>
+      <button class="button export-btn" onclick="exportAsPDF()">Export as PDF</button>
+    </div>
+    
+    <div class="canvas-container" id="flowchart-canvas"></div>
+    
+    <footer>
+      <p>© 2025 Logistics Flowchart Builder. All Rights Reserved.</p>
+    </footer>
+  </div>
+  
+  <!-- Fixed Home Button -->
   <a href="index.html" class="home-button" title="Go to Homepage">
     <svg class="home-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
       <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
       <polyline points="9 22 9 12 15 12 15 22"></polyline>
     </svg>
   </a>
-  <div class="container">
-    <header>
-      <h1>Logistics Flowchart Builder</h1>
-    </header>
-    <button class="button add-btn" onclick="addNode()">Add Node</button>
-    <div class="canvas-container" id="flowchart-canvas"></div>
-    <br>
-    <button class="button export-btn" onclick="exportAsPNG()">Export as PNG</button>
-    <button class="button export-btn" onclick="exportAsPDF()">Export as PDF</button>
-  </div>
+  
   <script>
     var nodes = [];
     var connections = [];
@@ -171,7 +332,7 @@
       // Add delete button and input with larger font size
       node.innerHTML = `
         <button class='delete-btn' onclick='deleteNode(this)'>X</button>
-        <input type='text' placeholder='Enter text'>
+        <input type='text' placeholder='Enter node text'>
         <div class='connector connector-right' data-node-id='${nodes.length}' data-side='right'></div>
         <div class='connector connector-left' data-node-id='${nodes.length}' data-side='left'></div>
       `;
@@ -195,6 +356,7 @@
           // Start a new connection
           startConnector = this;
           connectingMode = true;
+          this.style.transform = 'translateY(-50%) scale(1.2)';
         }
       });
       
@@ -207,13 +369,17 @@
           // Start a new connection
           startConnector = this;
           connectingMode = true;
+          this.style.transform = 'translateY(-50%) scale(1.2)';
         }
       });
     }
 
     function resetConnectingMode() {
       connectingMode = false;
-      startConnector = null;
+      if (startConnector) {
+        startConnector.style.transform = 'translateY(-50%)';
+        startConnector = null;
+      }
     }
 
     function createConnection(startConnector, endConnector) {
@@ -357,6 +523,7 @@
       // Clone the canvas and prepare it for export
       const original = document.getElementById('flowchart-canvas');
       const clone = original.cloneNode(true);
+      clone.style.height = original.scrollHeight + 'px';
       document.body.appendChild(clone);
       
       // Remove connectors and fix positions for export
@@ -378,10 +545,16 @@
       // Export
       html2canvas(clone, {
         backgroundColor: 'white',
-        scale: 2
+        scale: 2,
+        useCORS: true,
+        onclone: function(clonedDoc) {
+          const clonedCanvas = clonedDoc.querySelector('#flowchart-canvas');
+          clonedCanvas.style.overflow = 'visible';
+          clonedCanvas.style.border = 'none';
+        }
       }).then(canvas => {
         const link = document.createElement('a');
-        link.download = 'flowchart.png';
+        link.download = 'logistics_flowchart.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
         clone.remove();
@@ -392,6 +565,7 @@
       // Clone the canvas and prepare it for export
       const original = document.getElementById('flowchart-canvas');
       const clone = original.cloneNode(true);
+      clone.style.height = original.scrollHeight + 'px';
       document.body.appendChild(clone);
       
       // Remove connectors and fix positions for export
@@ -413,7 +587,13 @@
       // Export
       html2canvas(clone, {
         backgroundColor: 'white',
-        scale: 2
+        scale: 2,
+        useCORS: true,
+        onclone: function(clonedDoc) {
+          const clonedCanvas = clonedDoc.querySelector('#flowchart-canvas');
+          clonedCanvas.style.overflow = 'visible';
+          clonedCanvas.style.border = 'none';
+        }
       }).then(canvas => {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jspdf.jsPDF('landscape');
@@ -421,7 +601,7 @@
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
         pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth - 20, pdfHeight - 20);
-        pdf.save('flowchart.pdf');
+        pdf.save('logistics_flowchart.pdf');
         clone.remove();
       });
     }
@@ -439,6 +619,11 @@
         resetConnectingMode();
       }
     });
+    
+    // Add initial node to get started
+    window.onload = function() {
+      addNode();
+    };
   </script>
 </body>
 </html>
