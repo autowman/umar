@@ -14,19 +14,19 @@
       box-sizing: border-box;
       font-family: 'Arial', sans-serif;
     }
-    
+
     body {
       background-color: #f9f9f9;
       color: #333;
       line-height: 1.6;
     }
-    
+
     .container {
       max-width: 1200px;
       margin: 0 auto;
       padding: 20px;
     }
-    
+
     header {
       text-align: center;
       padding: 30px 0;
@@ -36,18 +36,18 @@
       margin-bottom: 30px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
-    
+
     h1 {
       font-size: 2.5rem;
       margin-bottom: 10px;
     }
-    
+
     h2 {
       font-size: 1.8rem;
       margin: 15px 0;
       color: #556B2F;
     }
-    
+
     .subtitle {
       font-size: 1.2rem;
       font-weight: 300;
@@ -333,17 +333,17 @@
       .toolbar {
         flex-direction: column;
       }
-      
+
       .tool-section {
         border-right: none;
         border-bottom: 1px solid #eee;
         padding-bottom: 15px;
       }
-      
+
       .canvas-container {
         height: 50vh;
       }
-      
+
       .modal-content {
         width: 90%;
       }
@@ -356,7 +356,7 @@
       <h1>Logistics Flowchart Builder</h1>
       <h3 class="subtitle">Create and customize your logistics process flow</h3>
     </header>
-    
+
     <div class="toolbar">
       <div class="tool-section">
         <h3>Add Components</h3>
@@ -370,25 +370,25 @@
           <div class="node-type" data-type="customer">Customer</div>
         </div>
       </div>
-      
+
       <div class="tool-section">
         <h3>Actions</h3>
         <button id="clear-canvas">Clear Canvas</button>
         <button id="save-template">Save Template</button>
         <button id="load-template">Load Template</button>
       </div>
-      
+
       <div class="tool-section">
         <h3>Export</h3>
         <button id="export-png">Export as PNG</button>
         <button id="export-pdf">Export as PDF</button>
       </div>
     </div>
-    
+
     <div class="canvas-container">
       <div id="flowchart-canvas"></div>
     </div>
-    
+
     <div id="edit-modal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
@@ -396,29 +396,29 @@
         <form id="node-edit-form">
           <label for="node-title">Title:</label>
           <input type="text" id="node-title" required>
-          
+
           <label for="node-description">Description:</label>
           <textarea id="node-description" rows="3"></textarea>
-          
+
           <label for="node-location">Location:</label>
           <input type="text" id="node-location">
-          
+
           <label for="node-step">Step Number:</label>
           <input type="number" id="node-step" min="1">
-          
+
           <button type="submit">Save</button>
           <button type="button" id="cancel-edit">Cancel</button>
         </form>
       </div>
     </div>
-    
+
     <div id="tooltip" class="tooltip"></div>
-    
+
     <footer>
       <p>© 2025 Logistics Flowchart Builder. All Rights Reserved.</p>
     </footer>
   </div>
-  
+
   <script>
     // Global variables
     let nodes = [];
@@ -428,7 +428,7 @@
     let currentConnection = null;
     let editingNode = null;
     let modalVisible = false;
-    
+
     // DOM elements
     const canvas = document.getElementById('flowchart-canvas');
     const nodeTypes = document.querySelectorAll('.node-type');
@@ -442,13 +442,13 @@
     const closeModal = document.querySelector('.close');
     const cancelEdit = document.getElementById('cancel-edit');
     const tooltip = document.getElementById('tooltip');
-    
+
     // Initialize the app
     function init() {
       setupEventListeners();
       setupInteractJS();
     }
-    
+
     // Setup event listeners
     function setupEventListeners() {
       // Node type drag
@@ -458,41 +458,41 @@
           createNode(e.clientX, e.clientY, type);
         });
       });
-      
+
       // Clear canvas button
       clearButton.addEventListener('click', () => {
         if (confirm('Are you sure you want to clear the canvas? All nodes and connections will be removed.')) {
           clearCanvas();
         }
       });
-      
+
       // Save template button
       saveButton.addEventListener('click', saveTemplate);
-      
+
       // Load template button
       loadButton.addEventListener('click', () => {
         if (confirm('Loading a template will replace the current flowchart. Continue?')) {
           loadTemplate();
         }
       });
-      
+
       // Export buttons
       exportPngButton.addEventListener('click', exportAsPNG);
       exportPdfButton.addEventListener('click', exportAsPDF);
-      
+
       // Modal close button
       closeModal.addEventListener('click', closeEditModal);
-      
+
       // Cancel edit button
       cancelEdit.addEventListener('click', closeEditModal);
-      
+
       // Edit form submit
       editForm.addEventListener('submit', function(e) {
         e.preventDefault();
         saveNodeEdit();
       });
     }
-    
+
     // Setup InteractJS library
     function setupInteractJS() {
       // Make nodes draggable
@@ -507,45 +507,45 @@
           ],
           autoScroll: true,
           listeners: {
-            start (event) {
+            start(event) {
               const nodeId = event.target.getAttribute('data-id');
               draggedNode = findNodeById(nodeId);
             },
-            move (event) {
+            move(event) {
               const target = event.target;
-              
+
               // Update node position
               const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
               const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
-              
+
               // Update the element's position
               target.style.transform = `translate(${x}px, ${y}px)`;
               target.setAttribute('data-x', x);
               target.setAttribute('data-y', y);
-              
+
               // Update node data
               if (draggedNode) {
                 draggedNode.x = x;
                 draggedNode.y = y;
               }
-              
+
               // Update connections
               updateConnections();
             },
-            end (event) {
+            end(event) {
               draggedNode = null;
             }
           }
         });
-      
+
       // Make connectors draggable to create connections
       interact('.connector')
         .draggable({
           listeners: {
-            start (event) {
+            start(event) {
               const nodeId = event.target.parentNode.getAttribute('data-id');
               const connectorType = event.target.getAttribute('data-type');
-              
+
               // Create temporary connection
               currentConnection = {
                 sourceId: nodeId,
@@ -555,39 +555,39 @@
                 targetX: event.clientX - canvas.getBoundingClientRect().left,
                 targetY: event.clientY - canvas.getBoundingClientRect().top
               };
-              
+
               // Create connection element
               const connection = document.createElement('div');
               connection.classList.add('connection');
               connection.setAttribute('data-temp', 'true');
               canvas.appendChild(connection);
-              
+
               updateConnectionLine(connection, currentConnection);
             },
-            move (event) {
+            move(event) {
               if (currentConnection) {
                 currentConnection.targetX = event.clientX - canvas.getBoundingClientRect().left;
                 currentConnection.targetY = event.clientY - canvas.getBoundingClientRect().top;
-                
+
                 const tempConnection = document.querySelector('.connection[data-temp="true"]');
                 if (tempConnection) {
                   updateConnectionLine(tempConnection, currentConnection);
                 }
               }
             },
-            end (event) {
+            end(event) {
               const tempConnection = document.querySelector('.connection[data-temp="true"]');
               if (tempConnection) {
                 tempConnection.remove();
               }
-              
+
               // Check if released over a connector
               const targetElement = document.elementFromPoint(event.clientX, event.clientY);
-              
+
               if (targetElement && targetElement.classList.contains('connector')) {
                 const targetNodeId = targetElement.parentNode.getAttribute('data-id');
                 const targetType = targetElement.getAttribute('data-type');
-                
+
                 // Don't connect to the same node
                 if (targetNodeId !== currentConnection.sourceId) {
                   // Create final connection
@@ -598,23 +598,23 @@
                     targetId: targetNodeId,
                     targetType: targetType
                   };
-                  
+
                   connections.push(connection);
                   createConnectionElement(connection);
                 }
               }
-              
+
               currentConnection = null;
             }
           }
         });
     }
-    
+
     // Create a new node
     function createNode(x, y, type) {
       const id = `node-${nodeCounter++}`;
       const canvasRect = canvas.getBoundingClientRect();
-      
+
       const node = {
         id: id,
         type: type,
@@ -625,11 +625,11 @@
         x: x - canvasRect.left - 90,
         y: y - canvasRect.top - 40
       };
-      
+
       nodes.push(node);
       createNodeElement(node);
     }
-    
+
     // Create HTML element for a node
     function createNodeElement(node) {
       const nodeElement = document.createElement('div');
@@ -641,7 +641,7 @@
       nodeElement.style.transform = `translate(${node.x}px, ${node.y}px)`;
       nodeElement.setAttribute('data-x', node.x);
       nodeElement.setAttribute('data-y', node.y);
-      
+
       // Create node content
       nodeElement.innerHTML = `
         <div class="node-header">
@@ -661,34 +661,37 @@
         <div class="connector connector-bottom" data-type="bottom"></div>
         <div class="connector connector-left" data-type="left"></div>
       `;
-      
+
       // Add event listeners
       const editBtn = nodeElement.querySelector('.edit-btn');
       const deleteBtn = nodeElement.querySelector('.delete-btn');
-      
+
       editBtn.addEventListener('click', () => {
         openEditModal(node);
       });
-      
+
       deleteBtn.addEventListener('click', () => {
         deleteNode(node.id);
       });
-      
+
       // Add tooltip behavior for connectors
       const connectors = nodeElement.querySelectorAll('.connector');
       connectors.forEach(connector => {
         connector.addEventListener('mouseenter', () => {
           showTooltip('Drag to connect', connector);
         });
-        
+
         connector.addEventListener('mouseleave', () => {
           hideTooltip();
         });
       });
-      
+
       canvas.appendChild(nodeElement);
+
+      // Re-initialize interact.js for the new node
+      setupInteractJS();
     }
-    
+
     // Create HTML element for a connection
     function createConnectionElement(connection) {
       const connectionElement = document.createElement('div');
@@ -696,51 +699,51 @@
       connectionElement.setAttribute('data-id', connection.id);
       connectionElement.setAttribute('data-source', connection.sourceId);
       connectionElement.setAttribute('data-target', connection.targetId);
-      
+
       // Add double-click to delete
       connectionElement.addEventListener('dblclick', () => {
         deleteConnection(connection.id);
       });
-      
+
       // Add tooltip
       connectionElement.addEventListener('mouseenter', () => {
         showTooltip('Double-click to delete', connectionElement);
       });
-      
+
       connectionElement.addEventListener('mouseleave', () => {
         hideTooltip();
       });
-      
+
       canvas.appendChild(connectionElement);
       updateConnection(connection);
     }
-    
+
     // Update all connections
     function updateConnections() {
       connections.forEach(connection => {
         updateConnection(connection);
       });
     }
-    
+
     // Update a specific connection
     function updateConnection(connection) {
       const connectionElement = document.querySelector(`.connection[data-id="${connection.id}"]`);
       if (!connectionElement) return;
-      
+
       const sourceNode = document.querySelector(`.node[data-id="${connection.sourceId}"]`);
       const targetNode = document.querySelector(`.node[data-id="${connection.targetId}"]`);
-      
+
       if (!sourceNode || !targetNode) {
         connectionElement.remove();
         connections = connections.filter(conn => conn.id !== connection.id);
         return;
       }
-      
+
       const sourceX = parseInt(sourceNode.getAttribute('data-x')) + getConnectorPosition(connection.sourceType, 'x');
       const sourceY = parseInt(sourceNode.getAttribute('data-y')) + getConnectorPosition(connection.sourceType, 'y');
       const targetX = parseInt(targetNode.getAttribute('data-x')) + getConnectorPosition(connection.targetType, 'x');
       const targetY = parseInt(targetNode.getAttribute('data-y')) + getConnectorPosition(connection.targetType, 'y');
-      
+
       updateConnectionLine(connectionElement, {
         sourceX,
         sourceY,
@@ -748,25 +751,25 @@
         targetY
       });
     }
-    
+
     // Update the visual appearance of a connection line
     function updateConnectionLine(element, connection) {
       const dx = connection.targetX - connection.sourceX;
       const dy = connection.targetY - connection.sourceY;
       const length = Math.sqrt(dx * dx + dy * dy);
       const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-      
+
       element.style.width = `${length}px`;
       element.style.left = `${connection.sourceX}px`;
       element.style.top = `${connection.sourceY}px`;
       element.style.transform = `rotate(${angle}deg)`;
     }
-    
+
     // Get connector position based on type
     function getConnectorPosition(type, axis) {
       const nodeWidth = 180;
       const nodeHeight = 80;
-      
+
       switch (type) {
         case 'top':
           return axis === 'x' ? nodeWidth / 2 : 0;
@@ -780,7 +783,7 @@
           return 0;
       }
     }
-    
+
     // Delete a node
     function deleteNode(nodeId) {
       if (confirm('Are you sure you want to delete this node?')) {
@@ -789,24 +792,24 @@
         if (nodeElement) {
           nodeElement.remove();
         }
-        
+
         // Remove connections involving this node
         const relatedConnections = connections.filter(
           conn => conn.sourceId === nodeId || conn.targetId === nodeId
         );
-        
+
         relatedConnections.forEach(conn => {
           deleteConnection(conn.id, false);
         });
-        
+
         // Remove from data array
         nodes = nodes.filter(node => node.id !== nodeId);
-        
+
         // Update step numbers
         updateStepNumbers();
       }
     }
-    
+
     // Delete a connection
     function deleteConnection(connectionId, confirm = true) {
       if (!confirm || window.confirm('Are you sure you want to delete this connection?')) {
@@ -815,67 +818,67 @@
         if (connectionElement) {
           connectionElement.remove();
         }
-        
+
         // Remove from data array
         connections = connections.filter(conn => conn.id !== connectionId);
       }
     }
-    
+
     // Open edit modal for a node
     function openEditModal(node) {
       editingNode = node;
-      
+
       // Fill form with node data
       document.getElementById('node-title').value = node.title;
       document.getElementById('node-description').value = node.description || '';
       document.getElementById('node-location').value = node.location || '';
       document.getElementById('node-step').value = node.step || '';
-      
+
       // Show modal
       editModal.style.display = 'block';
       modalVisible = true;
-      
+
       // Focus on title field
       document.getElementById('node-title').focus();
     }
-    
+
     // Close edit modal
     function closeEditModal() {
       editModal.style.display = 'none';
       modalVisible = false;
       editingNode = null;
     }
-    
+
     // Save node edit
     function saveNodeEdit() {
       if (!editingNode) return;
-      
+
       const title = document.getElementById('node-title').value;
       const description = document.getElementById('node-description').value;
       const location = document.getElementById('node-location').value;
       const step = parseInt(document.getElementById('node-step').value) || '';
-      
+
       // Update node data
       editingNode.title = title;
       editingNode.description = description;
       editingNode.location = location;
-      
+
       // Handle step number change
       if (step !== editingNode.step) {
         editingNode.step = step;
         updateStepNumbers();
       }
-      
+
       // Update node element
       const nodeElement = document.querySelector(`.node[data-id="${editingNode.id}"]`);
       if (nodeElement) {
         const titleElement = nodeElement.querySelector('.node-title');
         const descriptionElement = nodeElement.querySelector('.node-description');
         const stepElement = nodeElement.querySelector('.step-number');
-        
+
         titleElement.textContent = title;
         descriptionElement.textContent = description;
-        
+
         // Update or create step number
         if (step) {
           if (stepElement) {
@@ -889,7 +892,7 @@
         } else if (stepElement) {
           stepElement.remove();
         }
-        
+
         // Update or remove location
         let locationElement = nodeElement.querySelector('.node-location');
         if (location) {
@@ -905,19 +908,19 @@
           locationElement.remove();
         }
       }
-      
+
       closeEditModal();
     }
-    
+
     // Update step numbers to ensure they're sequential
     function updateStepNumbers() {
       // Get nodes with step numbers
       const nodesWithSteps = nodes.filter(node => node.step).sort((a, b) => a.step - b.step);
-      
+
       // Update step numbers
       nodesWithSteps.forEach((node, index) => {
         node.step = index + 1;
-        
+
         // Update DOM
         const nodeElement = document.querySelector(`.node[data-id="${node.id}"]`);
         if (nodeElement) {
@@ -928,21 +931,21 @@
         }
       });
     }
-    
+
     // Clear the canvas
     function clearCanvas() {
       // Remove all nodes
       document.querySelectorAll('.node').forEach(node => node.remove());
-      
+
       // Remove all connections
       document.querySelectorAll('.connection').forEach(conn => conn.remove());
-      
+
       // Clear data arrays
       nodes = [];
       connections = [];
       nodeCounter = 1;
     }
-    
+
     // Save the current template
     function saveTemplate() {
       const template = {
@@ -950,107 +953,107 @@
         connections: connections,
         counter: nodeCounter
       };
-      
+
       const templateJson = JSON.stringify(template);
       localStorage.setItem('logisticsTemplate', templateJson);
-      
+
       alert('Template saved successfully!');
     }
-    
+
     // Load a saved template
-function loadTemplate() {
-  const templateJson = localStorage.getItem('logisticsTemplate');
-  
-  if (!templateJson) {
-    alert('No saved template found!');
-    return;
-  }
-  
-  try {
-    // Clear current canvas
-    clearCanvas();
-    
-    // Parse the template
-    const template = JSON.parse(templateJson);
-    
-    // Load nodes
-    nodes = template.nodes;
-    connections = template.connections;
-    nodeCounter = template.counter || nodes.length + 1;
-    
-    // Create elements for nodes
-    nodes.forEach(node => {
-      createNodeElement(node);
-    });
-    
-    // Create elements for connections
-    connections.forEach(connection => {
-      createConnectionElement(connection);
-    });
-    
-    alert('Template loaded successfully!');
-  } catch (error) {
-    console.error('Error loading template:', error);
-    alert('Error loading template. Please try again.');
-  }
-}
+    function loadTemplate() {
+      const templateJson = localStorage.getItem('logisticsTemplate');
 
-// Export flowchart as PNG
-function exportAsPNG() {
-  html2canvas(canvas).then(canvas => {
-    const link = document.createElement('a');
-    link.download = 'logistics-flowchart.png';
-    link.href = canvas.toDataURL('image/png');
-    link.click();
-  });
-}
+      if (!templateJson) {
+        alert('No saved template found!');
+        return;
+      }
 
-// Export flowchart as PDF
-function exportAsPDF() {
-  html2canvas(canvas).then(canvas => {
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jspdf.jsPDF({
-      orientation: 'landscape',
-      unit: 'mm'
-    });
-    
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save('logistics-flowchart.pdf');
-  });
-}
+      try {
+        // Clear current canvas
+        clearCanvas();
 
-// Show tooltip
-function showTooltip(text, element) {
-  const rect = element.getBoundingClientRect();
-  const canvasRect = canvas.getBoundingClientRect();
-  
-  tooltip.textContent = text;
-  tooltip.style.left = (rect.left - canvasRect.left + rect.width / 2) + 'px';
-  tooltip.style.top = (rect.top - canvasRect.top - 30) + 'px';
-  tooltip.style.opacity = '1';
-}
+        // Parse the template
+        const template = JSON.parse(templateJson);
 
-// Hide tooltip
-function hideTooltip() {
-  tooltip.style.opacity = '0';
-}
+        // Load nodes
+        nodes = template.nodes;
+        connections = template.connections;
+        nodeCounter = template.counter || nodes.length + 1;
 
-// Find node by id
-function findNodeById(id) {
-  return nodes.find(node => node.id === id);
-}
+        // Create elements for nodes
+        nodes.forEach(node => {
+          createNodeElement(node);
+        });
 
-// Capitalize the first letter of a string
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+        // Create elements for connections
+        connections.forEach(connection => {
+          createConnectionElement(connection);
+        });
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', init);
+        alert('Template loaded successfully!');
+      } catch (error) {
+        console.error('Error loading template:', error);
+        alert('Error loading template. Please try again.');
+      }
+    }
 
+    // Export flowchart as PNG
+    function exportAsPNG() {
+      html2canvas(canvas).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'logistics-flowchart.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      });
+    }
 
-      
+    // Export flowchart as PDF
+    function exportAsPDF() {
+      html2canvas(canvas).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jspdf.jsPDF({
+          orientation: 'landscape',
+          unit: 'mm'
+        });
+
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save('logistics-flowchart.pdf');
+      });
+    }
+
+    // Show tooltip
+    function showTooltip(text, element) {
+      const rect = element.getBoundingClientRect();
+      const canvasRect = canvas.getBoundingClientRect();
+
+      tooltip.textContent = text;
+      tooltip.style.left = (rect.left - canvasRect.left + rect.width / 2) + 'px';
+      tooltip.style.top = (rect.top - canvasRect.top - 30) + 'px';
+      tooltip.style.opacity = '1';
+    }
+
+    // Hide tooltip
+    function hideTooltip() {
+      tooltip.style.opacity = '0';
+    }
+
+    // Find node by id
+    function findNodeById(id) {
+      return nodes.find(node => node.id === id);
+    }
+
+    // Capitalize the first letter of a string
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    // Initialize the application
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
