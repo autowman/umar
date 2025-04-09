@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TSP World Tour Game</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            background-color: #1a1a2e;
+            color: white;
+        }
+
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .game-header {
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .game-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .game-area {
+            flex: 1;
+            position: relative;
+            background-image: url('/api/placeholder/1600/900');
+            background-size: cover;
+            background-position: center;
+            overflow: hidden;
+        }
+
+        .location {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: #ff5252;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: white;
+            font-size: 14px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+            z-index: 10;
+            border: 2px solid white;
+            transition: all 0.3s ease;
+        }
+
+        .location.visited {
+            background-color: #4CAF50;
+        }
+
+        .location.start {
+            background-color: #2196F3;
+            width: 30px;
+            height: 30px;
+            z-index: 11;
+        }
+
+        .location-label {
+            position: absolute;
+            white-space: nowrap;
+            transform: translateY(20px);
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .path {
+            position: absolute;
+            height: 3px;
+            background-color: rgba(255, 255, 255, 0.5);
+            transform-origin: 0 0;
+            z-index: 5;
+        }
+
+        .path-label {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-size: 12px;
+            transform: translate(-50%, -50%);
+            z-index: 6;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            font-weight: bold;
+        }
+
+        .active-path {
+            background-color: #FFEB3B;
+            box-shadow: 0 0 15px #FFEB3B;
+            z-index: 7;
+            height: 4px;
+        }
+
+        .airplane {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            transform: translate(-50%, -50%) rotate(0deg);
+            z-index: 15;
+            transition: all 1s ease;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
+        }
+
+        .controls {
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        #instruction {
+            flex: 1;
+            margin-left: 10px;
+            font-style: italic;
+        }
+
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 20;
+            display: none;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            min-width: 280px;
+        }
+
+        .score {
+            font-size: 24px;
+            margin: 20px 0;
+            color: #4CAF50;
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .game-header h1 {
+                font-size: 1.2rem;
+            }
+
+            .location {
+                width: 20px;
+                height: 20px;
+            }
+
+            .location.start {
+                width: 24px;
+                height: 24px;
+            }
+
+            .location-label {
+                font-size: 10px;
+                transform: translateY(16px);
+            }
+
+            .path-label {
+                font-size: 10px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            #instruction {
+                margin-left: 0;
+                margin-top: 5px;
+                font-size: 12px;
+            }
+
+            .airplane {
+                width: 30px;
+                height: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="game-header">
+            <h1>TSP World Tour</h1>
+            <div class="stats">
+                <div>Fuel Consumed: <span id="fuel">0</span></div>
+                <div>Locations Visited: <span id="visited-count">0</span>/7</div>
+            </div>
+        </div>
+        <div class="game-area" id="game-area">
+            <!-- Locations will be added dynamically -->
+            <div class="airplane" id="airplane">
+                <svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22,16.9c0,0-4.3-2.9-6.3-4.4c-0.5-0.4-1.5-2.2-2.4-3.8c-0.3-2.3-0.7-4.6-0.7-4.6
+                    C12.3,2.4,11.3,1,10,1C9.1,1,8.4,1.4,8,2c-0.5,0.7-0.5,1.6-0.2,2.6c-0.1,0.1-3.4,5.8-7.6,6.3
+                    C0.1,10.9,0,11,0,11.1c0,0.1,0.1,0.5,0.5,0.5l4.3,0.6c-0.2,0.2-0.1,0.8,0.6,1l0.9,0.3c-0.3,0.2-0.3,0.9,0.6,1l0.9,0.3
+                    c-0.3,0.2-0.3,0.9,0.6,1l0.9,0.3c-0.1,0.9,0.2,0.9,0.5,0.9C10,17,10,17,10,17h0c0.2,0,0.4,0,0.6-0.1l2.8,0.9
+                    c0.1,0,0.2,0.1,0.3,0.1c0.2,0,0.5-0.1,0.7-0.2c0.4-0.3,0.6-0.8,0.5-1.2c-0.1-0.3-0.2-0.6-0.5-0.8l0.3-0.3c0.9,0.4,6.1,2.5,7.2,2.9
+                    c0.2,0.1,0.4,0.1,0.5,0.1c0.4,0,0.6-0.2,0.7-0.4C23.2,17.6,23,17.1,22,16.9z"/>
+                </svg>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="start-btn">Start Game</button>
+            <button id="reset-btn" disabled>Reset Game</button>
+            <span id="instruction">Click 'Start Game' to begin your world tour!</span>
+        </div>
+        <div class="game-over" id="game-over">
+            <h2>Tour Completed!</h2>
+            <div class="score">Total Fuel Consumed: <span id="final-score">0</span></div>
+            <button id="play-again-btn">Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Game state
+            const gameState = {
+                started: false,
+                currentLocation: null,
+                visitedLocations: [],
+                fuelConsumed: 0,
+                activePath: null,
+                canSelectLocation: false
+            };
+
+            // Define world locations - reduced to 7
+            const locations = [
+                { id: 1, name: "Hong Kong", x: 78, y: 40, isStart: true, isEnd: true },
+                { id: 2, name: "New York", x: 25, y: 35 },
+                { id: 3, name: "London", x: 47, y: 30 },
+                { id: 4, name: "Sydney", x: 85, y: 70 },
+                { id: 5, name: "Rio de Janeiro", x: 33, y: 62 },
+                { id: 6, name: "Cairo", x: 55, y: 42 },
+                { id: 7, name: "Mumbai", x: 66, y: 45 }
+            ];
+
+            // Generate random fuel costs between locations (1-100)
+            const fuelCosts = {};
+            for (let i = 0; i < locations.length; i++) {
+                fuelCosts[locations[i].id] = {};
+                for (let j = 0; j < locations.length; j++) {
+                    if (i !== j) {
+                        // Ensure symmetric costs between locations
+                        if (locations[j].id in fuelCosts && locations[i].id in fuelCosts[locations[j].id]) {
+                            fuelCosts[locations[i].id][locations[j].id] = fuelCosts[locations[j].id][locations[i].id];
+                        } else {
+                            fuelCosts[locations[i].id][locations[j].id] = Math.floor(Math.random() * 100) + 1;
+                        }
+                    }
+                }
+            }
+
+            const gameArea = document.getElementById('game-area');
+            const airplane = document.getElementById('airplane');
+            const startBtn = document.getElementById('start-btn');
+            const resetBtn = document.getElementById('reset-btn');
+            const fuelDisplay = document.getElementById('fuel');
+            const visitedCountDisplay = document.getElementById('visited-count');
+            const gameOverPanel = document.getElementById('game-over');
+            const finalScoreDisplay = document.getElementById('final-score');
+            const playAgainBtn = document.getElementById('play-again-btn');
+            const instructionDisplay = document.getElementById('instruction');
+
+            // Set background image for the game area - world map
+            gameArea.style.backgroundImage = "url('/api/placeholder/1600/900')";
+
+            // Create locations on the map
+            function createLocations() {
+                locations.forEach(location => {
+                    const locationElement = document.createElement('div');
+                    locationElement.className = `location${location.isStart ? ' start' : ''}`;
+                    locationElement.id = `location-${location.id}`;
+                    locationElement.style.left = `${location.x}%`;
+                    locationElement.style.top = `${location.y}%`;
+                    locationElement.dataset.id = location.id;
+                    locationElement.innerHTML = location.id;
+                    
+                    locationElement.addEventListener('click', () => selectLocation(location));
+                    
+                    const labelElement = document.createElement('div');
+                    labelElement.className = 'location-label';
+                    labelElement.textContent = location.name;
+                    
+                    locationElement.appendChild(labelElement);
+                    gameArea.appendChild(locationElement);
+                });
+            }
+
+            // Create paths between all locations with unique colors
+            function createPaths() {
+                // Generate distinguishable colors for paths
+                const pathColors = [
+                    'rgba(255, 255, 255, 0.6)',  // White
+                    'rgba(255, 165, 0, 0.6)',    // Orange
+                    'rgba(255, 192, 203, 0.6)',  // Pink
+                    'rgba(0, 255, 255, 0.6)',    // Cyan
+                    'rgba(255, 255, 0, 0.6)',    // Yellow
+                    'rgba(128, 0, 128, 0.6)',    // Purple
+                    'rgba(0, 128, 0, 0.6)'       // Green
+                ];
+                
+                let colorIndex = 0;
+                
+                for (let i = 0; i < locations.length; i++) {
+                    for (let j = i + 1; j < locations.length; j++) {
+                        const location1 = locations[i];
+                        const location2 = locations[j];
+                        
+                        const pathElement = document.createElement('div');
+                        pathElement.className = 'path';
+                        pathElement.id = `path-${location1.id}-${location2.id}`;
+                        
+                        // Assign a unique color to each path to make them more distinguishable
+                        pathElement.style.backgroundColor = pathColors[colorIndex % pathColors.length];
+                        colorIndex++;
+                        
+                        // Calculate path position and rotation
+                        const x1 = location1.x;
+                        const y1 = location1.y;
+                        const x2 = location2.x;
+                        const y2 = location2.y;
+                        
+                        const length = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+                        const angle = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI;
+                        
+                        pathElement.style.width = `${length}%`;
+                        pathElement.style.left = `${x1}%`;
+                        pathElement.style.top = `${y1}%`;
+                        pathElement.style.transform = `rotate(${angle}deg)`;
+                        
+                        // Add fuel cost label
+                        const labelElement = document.createElement('div');
+                        labelElement.className = 'path-label';
+                        
+                        // Position label at the middle of the path
+                        labelElement.style.left = `${(x1 + x2) / 2}%`;
+                        labelElement.style.top = `${(y1 + y2) / 2}%`;
+                        
+                        const fuelCost = fuelCosts[location1.id][location2.id];
+                        labelElement.textContent = fuelCost;
+                        
+                        // Add location info to the label to make it clearer
+                        labelElement.title = `${location1.name} to ${location2.name}: ${fuelCost} fuel`;
+                        
+                        gameArea.appendChild(pathElement);
+                        gameArea.appendChild(labelElement);
+                    }
+                }
+            }
+
+            // Initialize airplane position
+            function initAirplane() {
+                const startLocation = locations.find(loc => loc.isStart);
+                airplane.style.left = `${startLocation.x}%`;
+                airplane.style.top = `${startLocation.y}%`;
+                gameState.currentLocation = startLocation;
+            }
+
+            // Handle location selection
+            function selectLocation(location) {
+                if (!gameState.started || !gameState.canSelectLocation) return;
+                
+                // Can't select the current location
+                if (location.id === gameState.currentLocation.id) {
+                    instructionDisplay.textContent = "You're already at this location!";
+                    return;
+                }
+                
+                // Can't visit a location twice (except for the end)
+                if (gameState.visitedLocations.includes(location.id) && 
+                    !(location.isEnd && gameState.visitedLocations.length === locations.length - 1)) {
+                    instructionDisplay.textContent = "You've already visited this location!";
+                    return;
+                }
+                
+                // Can only return to start/end after visiting all other locations
+                if (location.isEnd && gameState.visitedLocations.length < locations.length - 1) {
+                    instructionDisplay.textContent = "Visit all locations before returning to Hong Kong!";
+                    return;
+                }
+                
+                // Move airplane to the selected location
+                moveAirplane(location);
+            }
+
+            // Move airplane to a new location
+            function moveAirplane(destination) {
+                gameState.canSelectLocation = false;
+                
+                const source = gameState.currentLocation;
+                
+                // Highlight the path
+                const pathId1 = `path-${source.id}-${destination.id}`;
+                const pathId2 = `path-${destination.id}-${source.id}`;
+                const pathElement = document.getElementById(pathId1) || document.getElementById(pathId2);
+                
+                if (pathElement) {
+                    pathElement.classList.add('active-path');
+                    gameState.activePath = pathElement;
+                }
+                
+                // Calculate rotation for airplane
+                const angle = Math.atan2(destination.y - source.y, destination.x - source.x) * 180 / Math.PI;
+                airplane.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+                
+                // Wait a moment before moving
+                setTimeout(() => {
+                    // Move airplane
+                    airplane.style.left = `${destination.x}%`;
+                    airplane.style.top = `${destination.y}%`;
+                    
+                    // Update fuel consumption
+                    const fuelCost = fuelCosts[source.id][destination.id];
+                    gameState.fuelConsumed += fuelCost;
+                    fuelDisplay.textContent = gameState.fuelConsumed;
+                    
+                    // Mark location as visited
+                    if (!gameState.visitedLocations.includes(source.id)) {
+                        gameState.visitedLocations.push(source.id);
+                        const sourceElement = document.getElementById(`location-${source.id}`);
+                        sourceElement.classList.add('visited');
+                        
+                        visitedCountDisplay.textContent = gameState.visitedLocations.length;
+                    }
+                    
+                    // Update current location
+                    gameState.currentLocation = destination;
+                    
+                    // Check if game is complete (returned to start after visiting all locations)
+                    if (destination.isEnd && gameState.visitedLocations.length === locations.length - 1) {
+                        setTimeout(endGame, 1000);
+                    } else {
+                        // Remove active path highlight after a delay
+                        setTimeout(() => {
+                            if (gameState.activePath) {
+                                gameState.activePath.classList.remove('active-path');
+                                gameState.activePath = null;
+                            }
+                            
+                            gameState.canSelectLocation = true;
+                            instructionDisplay.textContent = `Select your next destination!`;
+                        }, 500);
+                    }
+                }, 800);
+            }
+
+            // Start the game
+            function startGame() {
+                gameState.started = true;
+                gameState.visitedLocations = [];
+                gameState.fuelConsumed = 0;
+                gameState.canSelectLocation = true;
+                
+                fuelDisplay.textContent = "0";
+                visitedCountDisplay.textContent = "0";
+                
+                startBtn.disabled = true;
+                resetBtn.disabled = false;
+                
+                instructionDisplay.textContent = "Select your first destination!";
+                
+                // Reset all locations
+                locations.forEach(location => {
+                    const locationElement = document.getElementById(`location-${location.id}`);
+                    locationElement.classList.remove('visited');
+                });
+                
+                // Mark start location
+                const startLocation = locations.find(loc => loc.isStart);
+                gameState.currentLocation = startLocation;
+                
+                // Reset airplane position
+                airplane.style.left = `${startLocation.x}%`;
+                airplane.style.top = `${startLocation.y}%`;
+                airplane.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+            }
+
+            // Reset the game
+            function resetGame() {
+                gameState.started = false;
+                gameState.visitedLocations = [];
+                gameState.fuelConsumed = 0;
+                
+                startBtn.disabled = false;
+                resetBtn.disabled = true;
+                
+                instructionDisplay.textContent = "Click 'Start Game' to begin your world tour!";
+                
+                // Reset all locations
+                locations.forEach(location => {
+                    const locationElement = document.getElementById(`location-${location.id}`);
+                    locationElement.classList.remove('visited');
+                });
+                
+                // Reset airplane position
+                const startLocation = locations.find(loc => loc.isStart);
+                airplane.style.left = `${startLocation.x}%`;
+                airplane.style.top = `${startLocation.y}%`;
+                airplane.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+                
+                gameState.currentLocation = startLocation;
+                
+                if (gameState.activePath) {
+                    gameState.activePath.classList.remove('active-path');
+                    gameState.activePath = null;
+                }
+                
+                fuelDisplay.textContent = "0";
+                visitedCountDisplay.textContent = "0";
+                
+                gameOverPanel.style.display = 'none';
+            }
+
+            // End the game
+            function endGame() {
+                gameState.started = false;
+                gameState.canSelectLocation = false;
+                
+                // Display game over panel
+                gameOverPanel.style.display = 'block';
+                finalScoreDisplay.textContent = gameState.fuelConsumed;
+                
+                startBtn.disabled = true;
+                resetBtn.disabled = false;
+                
+                instructionDisplay.textContent = "Tour completed! Check your score.";
+            }
+
+            // Handle window resize
+            function handleResize() {
+                // This ensures mobile devices display correctly
+                const vh = window.innerHeight * 0.01;
+                document.documentElement.style.setProperty('--vh', `${vh}px`);
+            }
+
+            // Initialize the game
+            function init() {
+                createLocations();
+                createPaths();
+                initAirplane();
+                
+                startBtn.addEventListener('click', startGame);
+                resetBtn.addEventListener('click', resetGame);
+                playAgainBtn.addEventListener('click', resetGame);
+                
+                window.addEventListener('resize', handleResize);
+                handleResize();
+            }
+
+            init();
+        });
+    </script>
+</body>
+</html>
