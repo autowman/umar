@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Logistics Flowchart Builder</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/interact.js/1.10.17/interact.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Arial', sans-serif;
+    }
+    
+    body {
+      background-color: #f9f9f9;
+      color: #333;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    
+    header {
+      text-align: center;
+      padding: 30px 0;
+      background: linear-gradient(135deg, #556B2F 0%, #3A5311 100%);
+      color: white;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    
+    .subtitle {
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+    
+    .canvas-container {
+      width: 100%;
+      height: 70vh;
+      background: white;
+      border: 2px solid #ccc;
+      position: relative;
+      overflow: hidden;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      margin: 20px 0;
+    }
+    
+    .control-panel {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+    
+    .node {
+      position: absolute;
+      width: 200px;
+      min-height: 90px;
+      background-color: white;
+      border: 2px solid #556B2F;
+      border-radius: 8px;
+      padding: 15px;
+      cursor: move;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 10;
+    }
+    
+    .node:hover {
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .node input {
+      font-size: 18px;
+      width: 90%;
+      text-align: center;
+      border: 1px solid #ddd;
+      padding: 8px;
+      margin-top: 8px;
+      border-radius: 5px;
+    }
+    
+    .connector {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      background-color: #556B2F;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    
+    .connector:hover {
+      transform: scale(1.2);
+    }
+    
+    .connector-right {
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    
+    .connector-left {
+      left: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    
+    .delete-btn {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      background: #556B2F;
+      color: white;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      font-size: 12px;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .delete-btn:hover {
+      background-color: #8B0000;
+    }
+    
+    .connection {
+      position: absolute;
+      height: 3px;
+      background-color: #556B2F;
+      z-index: 5;
+      pointer-events: none;
+    }
+    
+    .arrow {
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-left: 8px solid transparent;
+      border-right: 8px solid transparent;
+      border-bottom: 12px solid #556B2F;
+      transform-origin: center bottom;
+      pointer-events: none;
+    }
+    
+    .button {
+      padding: 12px 18px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      color: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    
+    .add-btn { 
+      background: #556B2F; 
+    }
+    
+    .export-btn { 
+      background: #7A9A48; 
+    }
+    
+    .button:hover { 
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    
+    .button:active {
+      transform: translateY(0);
+    }
+    
+    .instructions {
+      background-color: #f0f0f0;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 20px 0;
+      border-left: 4px solid #556B2F;
+    }
+    
+    .instructions h3 {
+      color: #556B2F;
+      margin-bottom: 10px;
+    }
+    
+    .instructions ul {
+      list-style-type: none;
+      padding-left: 10px;
+    }
+    
+    .instructions li {
+      position: relative;
+      padding-left: 25px;
+      margin-bottom: 8px;
+    }
+    
+    .instructions li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #556B2F;
+      font-weight: bold;
+    }
+    
+    .home-button {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background: linear-gradient(135deg, #556B2F 0%, #3A5311 100%);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      z-index: 1000;
+    }
+    
+    .home-button:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+    }
+    
+    .home-icon {
+      width: 24px;
+      height: 24px;
+      stroke: white;
+      stroke-width: 2px;
+    }
+    
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      padding: 20px;
+      color: #777;
+      font-size: 0.9rem;
+    }
+    
+    @media (max-width: 768px) {
+      .button {
+        padding: 10px 14px;
+        font-size: 14px;
+      }
+      
+      .node {
+        width: 180px;
+      }
+      .report-btn { 
+        background: #A52A2A; /* A reddish color with an olive tint */
+      }
+      
+      .home-button {
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>TSP game</h1>
+
+    
+    <div class="control-panel">
+      <button class="button add-btn" onclick="location.href='tsp_game.html'">Play</button>
+      <button class="button report-btn" onclick="location.href='https://docs.google.com/document/d/1LJcWqIhnVQBmOD-MFpD3c_50Dz3e4SvUcRbPbiwPZJQ/edit?usp=sharing'">View Report</button>
+    </div>
+  
+  <script>
+    var nodes = [];
+    var connections = [];
+    var connectingMode = false;
+    var startConnector = null;
+
+    function addNode() {
+      const canvas = document.getElementById('flowchart-canvas');
+      const node = document.createElement('div');
+      node.classList.add('node');
+      node.style.left = `${50 + nodes.length * 20}px`;
+      node.style.top = `${50 + nodes.length * 20}px`;
+      
+      // Add delete button and input with larger font size
+      node.innerHTML = `
+        <button class='delete-btn' onclick='deleteNode(this)'>X</button>
+        <input type='text' placeholder='Enter node text'>
+        <div class='connector connector-right' data-node-id='${nodes.length}' data-side='right'></div>
+        <div class='connector connector-left' data-node-id='${nodes.length}' data-side='left'></div>
+      `;
+      
+      canvas.appendChild(node);
+      nodes.push(node);
+      makeDraggable(node);
+      setupConnectors(node);
+    }
+
+    function setupConnectors(node) {
+      const rightConnector = node.querySelector('.connector-right');
+      const leftConnector = node.querySelector('.connector-left');
+      
+      rightConnector.addEventListener('click', function() {
+        if (connectingMode && startConnector) {
+          // Complete the connection
+          createConnection(startConnector, this);
+          resetConnectingMode();
+        } else {
+          // Start a new connection
+          startConnector = this;
+          connectingMode = true;
+          this.style.transform = 'translateY(-50%) scale(1.2)';
+        }
+      });
+      
+      leftConnector.addEventListener('click', function() {
+        if (connectingMode && startConnector) {
+          // Complete the connection
+          createConnection(startConnector, this);
+          resetConnectingMode();
+        } else {
+          // Start a new connection
+          startConnector = this;
+          connectingMode = true;
+          this.style.transform = 'translateY(-50%) scale(1.2)';
+        }
+      });
+    }
+
+    function resetConnectingMode() {
+      connectingMode = false;
+      if (startConnector) {
+        startConnector.style.transform = 'translateY(-50%)';
+        startConnector = null;
+      }
+    }
+
+    function createConnection(startConnector, endConnector) {
+      // Don't connect to the same node
+      if (startConnector.dataset.nodeId === endConnector.dataset.nodeId) {
+        return;
+      }
+      
+      const canvas = document.getElementById('flowchart-canvas');
+      const connection = document.createElement('div');
+      connection.classList.add('connection');
+      
+      const arrow = document.createElement('div');
+      arrow.classList.add('arrow');
+      
+      canvas.appendChild(connection);
+      canvas.appendChild(arrow);
+      
+      const connectionData = {
+        startNodeId: parseInt(startConnector.dataset.nodeId),
+        endNodeId: parseInt(endConnector.dataset.nodeId),
+        startSide: startConnector.dataset.side,
+        endSide: endConnector.dataset.side,
+        connectionElement: connection,
+        arrowElement: arrow
+      };
+      
+      connections.push(connectionData);
+      updateConnection(connectionData);
+    }
+
+    function updateConnection(connectionData) {
+      const startNode = nodes[connectionData.startNodeId];
+      const endNode = nodes[connectionData.endNodeId];
+      
+      if (!startNode || !endNode) {
+        connectionData.connectionElement.remove();
+        connectionData.arrowElement.remove();
+        connections = connections.filter(conn => conn !== connectionData);
+        return;
+      }
+      
+      const startRect = startNode.getBoundingClientRect();
+      const endRect = endNode.getBoundingClientRect();
+      const canvasRect = document.getElementById('flowchart-canvas').getBoundingClientRect();
+      
+      // Calculate connector positions
+      const startX = connectionData.startSide === 'right' ? 
+        startRect.right - canvasRect.left :
+        startRect.left - canvasRect.left;
+      const startY = startRect.top + startRect.height/2 - canvasRect.top;
+      
+      const endX = connectionData.endSide === 'right' ? 
+        endRect.right - canvasRect.left :
+        endRect.left - canvasRect.left;
+      const endY = endRect.top + endRect.height/2 - canvasRect.top;
+      
+      // Calculate length and angle of the connection
+      const dx = endX - startX;
+      const dy = endY - startY;
+      const length = Math.sqrt(dx*dx + dy*dy);
+      const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+      
+      // Position the connection line
+      connectionData.connectionElement.style.width = `${length}px`;
+      connectionData.connectionElement.style.left = `${startX}px`;
+      connectionData.connectionElement.style.top = `${startY}px`;
+      connectionData.connectionElement.style.transform = `rotate(${angle}deg)`;
+      connectionData.connectionElement.style.transformOrigin = '0 0';
+      
+      // Position the arrow
+      connectionData.arrowElement.style.left = `${endX}px`;
+      connectionData.arrowElement.style.top = `${endY}px`;
+      connectionData.arrowElement.style.transform = `rotate(${angle - 90}deg)`;
+      connectionData.arrowElement.style.transformOrigin = 'center';
+    }
+
+    function updateAllConnections() {
+      connections.forEach(connectionData => {
+        updateConnection(connectionData);
+      });
+    }
+
+    function makeDraggable(element) {
+      interact(element).draggable({
+        inertia: true,
+        modifiers: [
+          interact.modifiers.restrictRect({ restriction: 'parent', endOnly: true })
+        ],
+        listeners: {
+          move(event) {
+            const x = (parseFloat(element.getAttribute('data-x')) || 0) + event.dx;
+            const y = (parseFloat(element.getAttribute('data-y')) || 0) + event.dy;
+            element.style.transform = `translate(${x}px, ${y}px)`;
+            element.setAttribute('data-x', x);
+            element.setAttribute('data-y', y);
+            updateAllConnections();
+          }
+        }
+      });
+    }
+
+    function deleteNode(button) {
+      const nodeElement = button.parentElement;
+      const nodeId = nodes.indexOf(nodeElement);
+      
+      // Remove connections associated with this node
+      connections = connections.filter(conn => {
+        if (conn.startNodeId === nodeId || conn.endNodeId === nodeId) {
+          conn.connectionElement.remove();
+          conn.arrowElement.remove();
+          return false;
+        }
+        return true;
+      });
+      
+      // Update node IDs for connections after removal
+      connections.forEach(conn => {
+        if (conn.startNodeId > nodeId) {
+          conn.startNodeId--;
+        }
+        if (conn.endNodeId > nodeId) {
+          conn.endNodeId--;
+        }
+      });
+      
+      // Remove the node and update nodes array
+      nodeElement.remove();
+      nodes = nodes.filter(node => node !== nodeElement);
+      
+      // Update connectors' data-node-id attributes
+      nodes.forEach((node, index) => {
+        const rightConnector = node.querySelector('.connector-right');
+        const leftConnector = node.querySelector('.connector-left');
+        if (rightConnector) rightConnector.dataset.nodeId = index;
+        if (leftConnector) leftConnector.dataset.nodeId = index;
+      });
+    }
+
+    function exportAsPNG() {
+      // Clone the canvas and prepare it for export
+      const original = document.getElementById('flowchart-canvas');
+      const clone = original.cloneNode(true);
+      clone.style.height = original.scrollHeight + 'px';
+      document.body.appendChild(clone);
+      
+      // Remove connectors and fix positions for export
+      const clonedNodes = clone.querySelectorAll('.node');
+      clonedNodes.forEach((node, index) => {
+        // Remove connectors
+        node.querySelectorAll('.connector').forEach(conn => conn.remove());
+        
+        // Fix position for export
+        const originalNode = nodes[index];
+        const x = parseFloat(originalNode.getAttribute('data-x')) || 0;
+        const y = parseFloat(originalNode.getAttribute('data-y')) || 0;
+        
+        node.style.transform = '';
+        node.style.left = `${parseInt(node.style.left) + x}px`;
+        node.style.top = `${parseInt(node.style.top) + y}px`;
+      });
+      
+      // Export
+      html2canvas(clone, {
+        backgroundColor: 'white',
+        scale: 2,
+        useCORS: true,
+        onclone: function(clonedDoc) {
+          const clonedCanvas = clonedDoc.querySelector('#flowchart-canvas');
+          clonedCanvas.style.overflow = 'visible';
+          clonedCanvas.style.border = 'none';
+        }
+      }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'logistics_flowchart.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        clone.remove();
+      });
+    }
+
+    function exportAsPDF() {
+      // Clone the canvas and prepare it for export
+      const original = document.getElementById('flowchart-canvas');
+      const clone = original.cloneNode(true);
+      clone.style.height = original.scrollHeight + 'px';
+      document.body.appendChild(clone);
+      
+      // Remove connectors and fix positions for export
+      const clonedNodes = clone.querySelectorAll('.node');
+      clonedNodes.forEach((node, index) => {
+        // Remove connectors
+        node.querySelectorAll('.connector').forEach(conn => conn.remove());
+        
+        // Fix position for export
+        const originalNode = nodes[index];
+        const x = parseFloat(originalNode.getAttribute('data-x')) || 0;
+        const y = parseFloat(originalNode.getAttribute('data-y')) || 0;
+        
+        node.style.transform = '';
+        node.style.left = `${parseInt(node.style.left) + x}px`;
+        node.style.top = `${parseInt(node.style.top) + y}px`;
+      });
+      
+      // Export
+      html2canvas(clone, {
+        backgroundColor: 'white',
+        scale: 2,
+        useCORS: true,
+        onclone: function(clonedDoc) {
+          const clonedCanvas = clonedDoc.querySelector('#flowchart-canvas');
+          clonedCanvas.style.overflow = 'visible';
+          clonedCanvas.style.border = 'none';
+        }
+      }).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jspdf.jsPDF('landscape');
+        const imgProps = pdf.getImageProperties(imgData);
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+        pdf.addImage(imgData, 'PNG', 10, 10, pdfWidth - 20, pdfHeight - 20);
+        pdf.save('logistics_flowchart.pdf');
+        clone.remove();
+      });
+    }
+
+    // Add keyboard event to cancel connection mode
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape' && connectingMode) {
+        resetConnectingMode();
+      }
+    });
+
+    // Add click event on canvas to cancel connection mode
+    document.getElementById('flowchart-canvas').addEventListener('click', function(event) {
+      if (connectingMode && event.target === this) {
+        resetConnectingMode();
+      }
+    });
+    
+    // Add initial node to get started
+    window.onload = function() {
+      addNode();
+    };
+  </script>
+</body>
+</html>
