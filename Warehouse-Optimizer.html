@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Warehouse Slotting Optimizer</title>
+    <style>
+        :root {
+            --primary-color: #ff6b35;
+            --primary-dark: #e85a2a;
+            --primary-light: #ff8c61;
+            --secondary-color: #2c3e50;
+            --accent-color: #ff9f1c;
+            --background-color: #fff5f2;
+            --text-color: #2c3e50;
+            --success-color: #2ecc71;
+            --warning-color: #f1c40f;
+            --danger-color: #e74c3c;
+            --gray-color: #95a5a6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(255, 107, 53, 0.1);
+        }
+
+        h1 {
+            color: var(--primary-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .input-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            background: #fff;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .input-group:hover {
+            transform: translateY(-5px);
+        }
+
+        .input-group h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 10px;
+        }
+
+        input[type="file"],
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        input[type="file"]:focus,
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        button {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 14px;
+        }
+
+        .primary-btn {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .primary-btn:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .secondary-btn {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .secondary-btn:hover {
+            background-color: #e88f1a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 159, 28, 0.3);
+        }
+
+        .visualization-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .visualization-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.1);
+        }
+
+        .visualization-box h2 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            border-bottom: 2px solid var(--primary-light);
+            padding-bottom: 10px;
+        }
+
+        #gridPreview,
+        #heatmap,
+        #optimizedLayout {
+            width: 100%;
+            height: 300px;
+            background: #fff;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        /* Custom file input styling */
+        input[type="file"] {
+            position: relative;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 2px dashed var(--primary-light);
+            cursor: pointer;
+        }
+
+        input[type="file"]::file-selector-button {
+            background: var(--primary-color);
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        input[type="file"]::file-selector-button:hover {
+            background: var(--primary-dark);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Warehouse Slotting Optimizer</h1>
+        
+        <div class="input-section">
+            <div class="input-group">
+                <h2>1. CSV Grid Upload</h2>
+                <input type="file" accept=".csv" id="csvUpload">
+            </div>
+
+            <div class="input-group">
+                <h2>2. Dock & Obstacles</h2>
+                <input type="text" placeholder="Dock (row, col — e.g. 0,0)" id="dockLocation">
+                <input type="text" placeholder="Obstacles (row, col pairs — e.g. 1,3 2,4 5,6)" id="obstacles">
+            </div>
+
+            <div class="input-group">
+                <h2>3. ABC Ratios (%)</h2>
+                <input type="number" placeholder="A %" id="ratioA">
+                <input type="number" placeholder="B %" id="ratioB">
+                <input type="number" placeholder="C %" id="ratioC">
+            </div>
+
+            <div class="input-group">
+                <h2>4. Travel-Cost Parameters</h2>
+                <input type="number" placeholder="Step cost" id="stepCost">
+                <input type="number" placeholder="Turn cost" id="turnCost">
+                <input type="number" placeholder="Obstacle cost" id="obstacleCost">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="primary-btn" onclick="runOptimization()">Run Optimization</button>
+            <button class="secondary-btn" onclick="downloadCSV()">Download CSV</button>
+            <button class="secondary-btn" onclick="resetAll()">Reset All</button>
+        </div>
+
+        <div class="visualization-section">
+            <div class="visualization-box">
+                <h2>Raw Grid Preview</h2>
+                <div id="gridPreview"></div>
+            </div>
+            <div class="visualization-box">
+                <h2>Initial Heatmap</h2>
+                <div id="heatmap"></div>
+            </div>
+            <div class="visualization-box">
+                <h2>Optimized Layout</h2>
+                <div id="optimizedLayout"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables to store data
+        let gridData = [];
+        let dockLocation = null;
+        let obstacles = [];
+        let abcRatios = { A: 0, B: 0, C: 0 };
+        let costParams = { step: 0, turn: 0, obstacle: 0 };
+
+        // Function to parse CSV file
+        function parseCSV(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const csvData = event.target.result;
+                    const rows = csvData.split('\n');
+                    gridData = rows.map(row => row.split(',').map(cell => cell.trim()));
+                    resolve(gridData);
+                };
+                reader.onerror = () => reject(new Error('Failed to read CSV file'));
+                reader.readAsText(file);
+            });
+        }
+
+        // Function to validate and parse dock location
+        function parseDockLocation(dockStr) {
+            const match = dockStr.match(/^(\d+),(\d+)$/);
+            if (!match) throw new Error('Invalid dock location format');
+            return { row: parseInt(match[1]), col: parseInt(match[2]) };
+        }
+
+        // Function to validate and parse obstacles
+        function parseObstacles(obstaclesStr) {
+            if (!obstaclesStr.trim()) return [];
+            return obstaclesStr.split(' ').map(obs => {
+                const match = obs.match(/^(\d+),(\d+)$/);
+                if (!match) throw new Error('Invalid obstacle format');
+                return { row: parseInt(match[1]), col: parseInt(match[2]) };
+            });
+        }
+
+        // Function to validate ABC ratios
+        function validateABCRatios(ratios) {
+            const total = ratios.A + ratios.B + ratios.C;
+            if (Math.abs(total - 100) > 0.01) {
+                throw new Error('ABC ratios must sum to 100%');
+            }
+        }
+
+        // Function to calculate distance between two points
+        function calculateDistance(point1, point2) {
+            return Math.abs(point1.row - point2.row) + Math.abs(point1.col - point2.col);
+        }
+
+        // Function to calculate cost for a path
+        function calculatePathCost(start, end) {
+            const distance = calculateDistance(start, end);
+            const turns = Math.min(Math.abs(start.row - end.row), Math.abs(start.col - end.col));
+            const obstacleCount = obstacles.filter(obs => 
+                isPointOnPath(start, end, obs)
+            ).length;
+
+            return distance * costParams.step + 
+                   turns * costParams.turn + 
+                   obstacleCount * costParams.obstacle;
+        }
+
+        // Function to check if a point is on a path
+        function isPointOnPath(start, end, point) {
+            const minRow = Math.min(start.row, end.row);
+            const maxRow = Math.max(start.row, end.row);
+            const minCol = Math.min(start.col, end.col);
+            const maxCol = Math.max(start.col, end.col);
+
+            return point.row >= minRow && point.row <= maxRow &&
+                   point.col >= minCol && point.col <= maxCol;
+        }
+
+        // Function to optimize warehouse layout
+        function optimizeLayout() {
+            if (!gridData.length || !dockLocation) {
+                throw new Error('Please upload grid data and set dock location first');
+            }
+
+            const rows = gridData.length;
+            const cols = gridData[0].length;
+            const totalSlots = rows * cols - obstacles.length - 1; // -1 for dock
+
+            // Calculate number of slots for each category
+            const slotsA = Math.floor(totalSlots * abcRatios.A / 100);
+            const slotsB = Math.floor(totalSlots * abcRatios.B / 100);
+            const slotsC = totalSlots - slotsA - slotsB;
+
+            // Create distance matrix from dock to all points
+            const distances = [];
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols; j++) {
+                    if (i === dockLocation.row && j === dockLocation.col) continue;
+                    if (obstacles.some(obs => obs.row === i && obs.col === j)) continue;
+                    
+                    distances.push({
+                        row: i,
+                        col: j,
+                        distance: calculatePathCost(dockLocation, { row: i, col: j })
+                    });
+                }
+            }
+
+            // Sort by distance and assign categories
+            distances.sort((a, b) => a.distance - b.distance);
+            
+            // Create optimized layout
+            const optimizedLayout = Array(rows).fill().map(() => Array(cols).fill(''));
+            
+            // Place dock
+            optimizedLayout[dockLocation.row][dockLocation.col] = 'DOCK';
+            
+            // Place obstacles
+            obstacles.forEach(obs => {
+                optimizedLayout[obs.row][obs.col] = 'OBSTACLE';
+            });
+
+            // Assign categories
+            let currentIndex = 0;
+            for (let i = 0; i < slotsA; i++) {
+                const pos = distances[currentIndex++];
+                optimizedLayout[pos.row][pos.col] = 'A';
+            }
+            for (let i = 0; i < slotsB; i++) {
+                const pos = distances[currentIndex++];
+                optimizedLayout[pos.row][pos.col] = 'B';
+            }
+            for (let i = 0; i < slotsC; i++) {
+                const pos = distances[currentIndex++];
+                optimizedLayout[pos.row][pos.col] = 'C';
+            }
+
+            return optimizedLayout;
+        }
+
+        // Function to visualize grid
+        function visualizeGrid(containerId, data, type = 'grid') {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            const table = document.createElement('table');
+            table.style.width = '100%';
+            table.style.height = '100%';
+            table.style.borderCollapse = 'collapse';
+            table.style.tableLayout = 'fixed';
+            table.style.backgroundColor = 'white';
+
+            data.forEach((row, i) => {
+                const tr = document.createElement('tr');
+                row.forEach((cell, j) => {
+                    const td = document.createElement('td');
+                    td.textContent = cell || '';
+                    td.style.border = '1px solid #ddd';
+                    td.style.padding = '8px';
+                    td.style.textAlign = 'center';
+                    td.style.fontSize = '14px';
+                    td.style.fontWeight = '500';
+                    td.style.minWidth = '40px';
+                    td.style.height = '40px';
+                    td.style.verticalAlign = 'middle';
+                    td.style.whiteSpace = 'nowrap';
+                    td.style.overflow = 'hidden';
+                    td.style.textOverflow = 'ellipsis';
+
+                    // Add colors based on type
+                    if (type === 'heatmap') {
+                        const intensity = cell ? (cell === 'A' ? 1 : cell === 'B' ? 0.7 : 0.4) : 0;
+                        td.style.backgroundColor = `rgba(52, 152, 219, ${intensity})`;
+                        td.style.color = intensity > 0.5 ? 'white' : 'black';
+                    } else {
+                        switch(cell) {
+                            case 'A': 
+                                td.style.backgroundColor = '#3498db';
+                                td.style.color = 'white';
+                                break;
+                            case 'B': 
+                                td.style.backgroundColor = '#2ecc71';
+                                td.style.color = 'white';
+                                break;
+                            case 'C': 
+                                td.style.backgroundColor = '#e74c3c';
+                                td.style.color = 'white';
+                                break;
+                            case 'DOCK': 
+                                td.style.backgroundColor = '#f1c40f';
+                                td.style.color = 'black';
+                                break;
+                            case 'OBSTACLE': 
+                                td.style.backgroundColor = '#95a5a6';
+                                td.style.color = 'white';
+                                break;
+                            default:
+                                td.style.backgroundColor = '#ffffff';
+                                td.style.color = '#2c3e50';
+                        }
+                    }
+                    
+                    tr.appendChild(td);
+                });
+                table.appendChild(tr);
+            });
+
+            // Add a wrapper div for better control
+            const wrapper = document.createElement('div');
+            wrapper.style.width = '100%';
+            wrapper.style.height = '100%';
+            wrapper.style.overflow = 'auto';
+            wrapper.style.backgroundColor = 'white';
+            wrapper.style.borderRadius = '4px';
+            wrapper.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
+            wrapper.appendChild(table);
+            container.appendChild(wrapper);
+        }
+
+        // Main optimization function
+        async function runOptimization() {
+            try {
+                // Get and validate inputs
+                dockLocation = parseDockLocation(document.getElementById('dockLocation').value);
+                obstacles = parseObstacles(document.getElementById('obstacles').value);
+                
+                abcRatios = {
+                    A: parseFloat(document.getElementById('ratioA').value) || 0,
+                    B: parseFloat(document.getElementById('ratioB').value) || 0,
+                    C: parseFloat(document.getElementById('ratioC').value) || 0
+                };
+                
+                costParams = {
+                    step: parseFloat(document.getElementById('stepCost').value) || 1,
+                    turn: parseFloat(document.getElementById('turnCost').value) || 1,
+                    obstacle: parseFloat(document.getElementById('obstacleCost').value) || 1
+                };
+
+                validateABCRatios(abcRatios);
+
+                // Run optimization
+                const optimizedLayout = optimizeLayout();
+
+                // Visualize results
+                visualizeGrid('gridPreview', gridData);
+                visualizeGrid('heatmap', optimizedLayout, 'heatmap');
+                visualizeGrid('optimizedLayout', optimizedLayout);
+
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+
+        // Function to download results as CSV
+        function downloadCSV() {
+            if (!gridData.length) {
+                alert('Please run optimization first');
+                return;
+            }
+
+            const csvContent = gridData.map(row => row.join(',')).join('\n');
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'warehouse_optimization.csv';
+            link.click();
+        }
+
+        // Function to reset all inputs and visualizations
+        function resetAll() {
+            document.getElementById('csvUpload').value = '';
+            document.getElementById('dockLocation').value = '';
+            document.getElementById('obstacles').value = '';
+            document.getElementById('ratioA').value = '';
+            document.getElementById('ratioB').value = '';
+            document.getElementById('ratioC').value = '';
+            document.getElementById('stepCost').value = '';
+            document.getElementById('turnCost').value = '';
+            document.getElementById('obstacleCost').value = '';
+            
+            gridData = [];
+            dockLocation = null;
+            obstacles = [];
+            abcRatios = { A: 0, B: 0, C: 0 };
+            costParams = { step: 0, turn: 0, obstacle: 0 };
+            
+            document.getElementById('gridPreview').innerHTML = '';
+            document.getElementById('heatmap').innerHTML = '';
+            document.getElementById('optimizedLayout').innerHTML = '';
+        }
+
+        // Add event listener for CSV file upload
+        document.getElementById('csvUpload').addEventListener('change', async function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                try {
+                    gridData = await parseCSV(file);
+                    visualizeGrid('gridPreview', gridData);
+                } catch (error) {
+                    alert('Error reading CSV file: ' + error.message);
+                }
+            }
+        });
+    </script>
+</body>
+</html> 
